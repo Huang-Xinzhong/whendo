@@ -62,7 +62,7 @@
             <option>按截止时间排序</option>
             <option>按创建时间排序</option>
           </select>
-          <button onclick="showPage('new-task')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition">
+          <button onclick="openModal('new-task-modal')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
             新建任务
           </button>
@@ -84,7 +84,7 @@
               <div class="flex items-start justify-between">
                 <h3 class="font-semibold text-gray-900 line-through text-gray-500">完成季度报告</h3>
                 <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
-                  <button onclick="showPage('edit-task')" class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                  <button onclick="openModal('edit-task-modal')" class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
                   <button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
                 </div>
               </div>
@@ -101,7 +101,7 @@
               <div class="flex items-start justify-between">
                 <h3 class="font-semibold text-gray-900">回复客户邮件</h3>
                 <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
-                  <button onclick="showPage('edit-task')" class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                  <button onclick="openModal('edit-task-modal')" class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
                   <button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
                 </div>
               </div>
@@ -121,7 +121,7 @@
               <div class="flex items-start justify-between">
                 <h3 class="font-semibold text-gray-900">团队周会准备</h3>
                 <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
-                  <button onclick="showPage('edit-task')" class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                  <button onclick="openModal('edit-task-modal')" class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
                   <button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
                 </div>
               </div>
@@ -141,7 +141,7 @@
               <div class="flex items-start justify-between">
                 <h3 class="font-semibold text-gray-900">更新项目文档</h3>
                 <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
-                  <button onclick="showPage('edit-task')" class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                  <button onclick="openModal('edit-task-modal')" class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
                   <button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
                 </div>
               </div>
@@ -154,172 +154,134 @@
     </main>
   </section>
 
-  <!-- ===== 2. 新建任务 ===== -->
-  <section id="new-task" class="page w-[1100px] h-[720px] bg-white rounded-xl shadow-2xl overflow-hidden flex border border-gray-200">
-    <aside class="w-64 bg-gray-50 border-r border-gray-200 flex flex-col">
-      <div class="p-6 border-b border-gray-200">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          </div>
-          <span class="text-xl font-bold text-gray-900">WhenDo</span>
-        </div>
-      </div>
-      <nav class="flex-1 p-4 space-y-1">
-        <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 px-2">工作区</div>
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 bg-white rounded-lg border border-gray-200 shadow-sm text-gray-900 font-medium"><span class="w-2 h-2 rounded-full bg-blue-500"></span>工作<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">3</span></a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition"><span class="w-2 h-2 rounded-full bg-green-500"></span>家庭<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">2</span></a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition"><span class="w-2 h-2 rounded-full bg-purple-500"></span>个人<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">5</span></a>
-      </nav>
-    </aside>
-    <main class="flex-1 flex flex-col bg-white">
-      <header class="h-16 border-b border-gray-200 flex items-center px-8 bg-white">
-        <button onclick="showPage('main')" class="text-gray-500 hover:text-gray-900 flex items-center gap-1 text-sm">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-          返回
+  <!-- ===== 2. 新建任务弹窗 ===== -->
+  <section id="new-task-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-2xl w-[560px] max-h-[85vh] overflow-y-auto p-6 border border-gray-200">
+      <div class="flex items-center justify-between mb-5">
+        <h2 class="text-lg font-bold text-gray-900">新建任务</h2>
+        <button onclick="closeModal('new-task-modal')" class="text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-100 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
-        <h1 class="ml-4 text-xl font-bold text-gray-900">新建任务</h1>
-      </header>
-      <div class="flex-1 overflow-y-auto p-8">
-        <div class="max-w-2xl space-y-6">
+      </div>
+      <div class="space-y-5">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">任务标题</label>
+          <input type="text" placeholder="请输入任务标题" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">描述</label>
+          <textarea rows="3" placeholder="补充任务详情..." class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">任务标题</label>
-            <input type="text" placeholder="请输入任务标题" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <label class="block text-sm font-medium text-gray-700 mb-1">所属工作区</label>
+            <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option>工作</option>
+              <option>家庭</option>
+              <option>个人</option>
+            </select>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">描述</label>
-            <textarea rows="4" placeholder="补充任务详情..." class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+            <label class="block text-sm font-medium text-gray-700 mb-1">截止时间</label>
+            <input type="datetime-local" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
           </div>
-          <div class="grid grid-cols-2 gap-6">
+        </div>
+        <div class="border-t border-gray-200 pt-5">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-semibold text-gray-900">提醒设置</h3>
+            <label class="inline-flex items-center cursor-pointer">
+              <input type="checkbox" checked class="sr-only peer">
+              <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+            </label>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">所属工作区</label>
-              <select class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <option>工作</option>
-                <option>家庭</option>
-                <option>个人</option>
+              <label class="block text-xs font-medium text-gray-500 mb-1">提醒类型</label>
+              <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option>单次提醒</option>
+                <option>循环提醒</option>
               </select>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">截止时间</label>
-              <input type="datetime-local" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <label class="block text-xs font-medium text-gray-500 mb-1">提醒时间</label>
+              <input type="datetime-local" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
             </div>
-          </div>
-          <div class="border-t border-gray-200 pt-6">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="text-sm font-semibold text-gray-900">提醒设置</h3>
-              <label class="inline-flex items-center cursor-pointer">
-                <input type="checkbox" checked class="sr-only peer">
-                <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
-              </label>
-            </div>
-            <div class="grid grid-cols-2 gap-6">
-              <div>
-                <label class="block text-xs font-medium text-gray-500 mb-1">提醒类型</label>
-                <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                  <option>单次提醒</option>
-                  <option>循环提醒</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-medium text-gray-500 mb-1">提醒时间</label>
-                <input type="datetime-local" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-              </div>
-            </div>
-          </div>
-          <div class="flex items-center justify-end gap-3 pt-4">
-            <button onclick="showPage('main')" class="px-5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition">取消</button>
-            <button onclick="showPage('main')" class="px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition">保存任务</button>
           </div>
         </div>
       </div>
-    </main>
+      <div class="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+        <button onclick="closeModal('new-task-modal')" class="px-5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition">取消</button>
+        <button onclick="closeModal('new-task-modal')" class="px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition">保存任务</button>
+      </div>
+    </div>
   </section>
 
-  <!-- ===== 3. 编辑任务 ===== -->
-  <section id="edit-task" class="page w-[1100px] h-[720px] bg-white rounded-xl shadow-2xl overflow-hidden flex border border-gray-200">
-    <aside class="w-64 bg-gray-50 border-r border-gray-200 flex flex-col">
-      <div class="p-6 border-b border-gray-200">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+  <!-- ===== 3. 编辑任务弹窗 ===== -->
+  <section id="edit-task-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-2xl w-[560px] max-h-[85vh] overflow-y-auto p-6 border border-gray-200">
+      <div class="flex items-center justify-between mb-5">
+        <h2 class="text-lg font-bold text-gray-900">编辑任务</h2>
+        <button onclick="closeModal('edit-task-modal')" class="text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-100 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div class="space-y-5">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">任务标题</label>
+          <input type="text" value="回复客户邮件" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">描述</label>
+          <textarea rows="3" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">关于下周合作方案的沟通，需要确认初步报价和排期。</textarea>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">所属工作区</label>
+            <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option selected>工作</option>
+              <option>家庭</option>
+              <option>个人</option>
+            </select>
           </div>
-          <span class="text-xl font-bold text-gray-900">WhenDo</span>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">截止时间</label>
+            <input type="datetime-local" value="2025-04-06T15:00" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+        </div>
+        <div class="border-t border-gray-200 pt-5">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-semibold text-gray-900">提醒设置</h3>
+            <label class="inline-flex items-center cursor-pointer">
+              <input type="checkbox" checked class="sr-only peer">
+              <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+            </label>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">提醒类型</label>
+              <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option selected>单次提醒</option>
+                <option>循环提醒</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">提醒时间</label>
+              <input type="datetime-local" value="2025-04-06T14:30" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+          </div>
         </div>
       </div>
-      <nav class="flex-1 p-4 space-y-1">
-        <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 px-2">工作区</div>
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 bg-white rounded-lg border border-gray-200 shadow-sm text-gray-900 font-medium"><span class="w-2 h-2 rounded-full bg-blue-500"></span>工作<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">3</span></a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition"><span class="w-2 h-2 rounded-full bg-green-500"></span>家庭<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">2</span></a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition"><span class="w-2 h-2 rounded-full bg-purple-500"></span>个人<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">5</span></a>
-      </nav>
-    </aside>
-    <main class="flex-1 flex flex-col bg-white">
-      <header class="h-16 border-b border-gray-200 flex items-center justify-between px-8 bg-white">
-        <div class="flex items-center">
-          <button onclick="showPage('main')" class="text-gray-500 hover:text-gray-900 flex items-center gap-1 text-sm">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-            返回
-          </button>
-          <h1 class="ml-4 text-xl font-bold text-gray-900">编辑任务</h1>
-        </div>
-        <button class="text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-1">
+      <div class="mt-6 flex items-center justify-between pt-4 border-t border-gray-100">
+        <button onclick="closeModal('edit-task-modal')" class="text-red-600 hover:bg-red-50 px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-1">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
           删除任务
         </button>
-      </header>
-      <div class="flex-1 overflow-y-auto p-8">
-        <div class="max-w-2xl space-y-6">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">任务标题</label>
-            <input type="text" value="回复客户邮件" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">描述</label>
-            <textarea rows="4" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">关于下周合作方案的沟通，需要确认初步报价和排期。</textarea>
-          </div>
-          <div class="grid grid-cols-2 gap-6">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">所属工作区</label>
-              <select class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <option selected>工作</option>
-                <option>家庭</option>
-                <option>个人</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">截止时间</label>
-              <input type="datetime-local" value="2025-04-06T15:00" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            </div>
-          </div>
-          <div class="border-t border-gray-200 pt-6">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="text-sm font-semibold text-gray-900">提醒设置</h3>
-              <label class="inline-flex items-center cursor-pointer">
-                <input type="checkbox" checked class="sr-only peer">
-                <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
-              </label>
-            </div>
-            <div class="grid grid-cols-2 gap-6">
-              <div>
-                <label class="block text-xs font-medium text-gray-500 mb-1">提醒类型</label>
-                <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                  <option selected>单次提醒</option>
-                  <option>循环提醒</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-medium text-gray-500 mb-1">提醒时间</label>
-                <input type="datetime-local" value="2025-04-06T14:30" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-              </div>
-            </div>
-          </div>
-          <div class="flex items-center justify-end gap-3 pt-4">
-            <button onclick="showPage('main')" class="px-5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition">取消</button>
-            <button onclick="showPage('main')" class="px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition">保存更改</button>
-          </div>
+        <div class="flex items-center gap-3">
+          <button onclick="closeModal('edit-task-modal')" class="px-5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition">取消</button>
+          <button onclick="closeModal('edit-task-modal')" class="px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition">保存更改</button>
         </div>
       </div>
-    </main>
+    </div>
   </section>
 
   <!-- ===== 4. 设置页面 ===== -->
@@ -447,8 +409,8 @@
   <!-- 底部快速跳转（演示用） -->
   <div class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-white shadow-lg border border-gray-200 rounded-full px-4 py-2 flex items-center gap-2 z-40">
     <button onclick="showPage('main')" class="px-3 py-1.5 text-sm font-medium rounded-full hover:bg-gray-100 transition">主界面</button>
-    <button onclick="showPage('new-task')" class="px-3 py-1.5 text-sm font-medium rounded-full hover:bg-gray-100 transition">新建</button>
-    <button onclick="showPage('edit-task')" class="px-3 py-1.5 text-sm font-medium rounded-full hover:bg-gray-100 transition">编辑</button>
+    <button onclick="openModal('new-task-modal')" class="px-3 py-1.5 text-sm font-medium rounded-full hover:bg-gray-100 transition">新建</button>
+    <button onclick="openModal('edit-task-modal')" class="px-3 py-1.5 text-sm font-medium rounded-full hover:bg-gray-100 transition">编辑</button>
     <button onclick="showPage('settings')" class="px-3 py-1.5 text-sm font-medium rounded-full hover:bg-gray-100 transition">设置</button>
     <button onclick="showPage('reminder')" class="px-3 py-1.5 text-sm font-medium rounded-full hover:bg-gray-100 transition">提醒弹窗</button>
   </div>
@@ -457,6 +419,11 @@
     function showPage(id) {
       // 隐藏所有 .page
       document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+      // 关闭所有 modal
+      document.querySelectorAll('.fixed.z-50').forEach(el => {
+        el.classList.add('hidden');
+        el.classList.remove('flex');
+      });
       // 处理 reminder 弹窗
       const reminder = document.getElementById('reminder');
       if (id === 'reminder') {
@@ -469,6 +436,18 @@
         reminder.classList.remove('flex');
         document.getElementById(id).classList.add('active');
       }
+    }
+
+    function openModal(id) {
+      const el = document.getElementById(id);
+      el.classList.remove('hidden');
+      el.classList.add('flex');
+    }
+
+    function closeModal(id) {
+      const el = document.getElementById(id);
+      el.classList.add('hidden');
+      el.classList.remove('flex');
     }
   </script>
 </body>
