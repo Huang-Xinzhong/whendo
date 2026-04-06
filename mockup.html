@@ -3,58 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WhenDo - 主界面示例</title>
+  <title>WhenDo - 界面原型</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+    .page { display: none; }
+    .page.active { display: flex; }
   </style>
 </head>
-<body class="bg-gray-100 h-screen flex items-center justify-center p-8">
+<body class="bg-gray-100 min-h-screen flex flex-col items-center p-8 gap-10">
 
-  <!-- App Window -->
-  <div class="w-[1100px] h-[720px] bg-white rounded-xl shadow-2xl overflow-hidden flex border border-gray-200">
-
+  <!-- ===== 1. 主界面 ===== -->
+  <section id="main" class="page active w-[1100px] h-[720px] bg-white rounded-xl shadow-2xl overflow-hidden flex border border-gray-200">
     <!-- Sidebar -->
     <aside class="w-64 bg-gray-50 border-r border-gray-200 flex flex-col">
       <div class="p-6 border-b border-gray-200">
         <div class="flex items-center gap-3">
           <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
           </div>
           <span class="text-xl font-bold text-gray-900">WhenDo</span>
         </div>
       </div>
-
       <nav class="flex-1 p-4 space-y-1">
         <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 px-2">工作区</div>
-
         <a href="#" class="flex items-center gap-3 px-3 py-2.5 bg-white rounded-lg border border-gray-200 shadow-sm text-gray-900 font-medium">
-          <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-          工作
-          <span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">3</span>
+          <span class="w-2 h-2 rounded-full bg-blue-500"></span>工作<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">3</span>
         </a>
         <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition">
-          <span class="w-2 h-2 rounded-full bg-green-500"></span>
-          家庭
-          <span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">2</span>
+          <span class="w-2 h-2 rounded-full bg-green-500"></span>家庭<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">2</span>
         </a>
         <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition">
-          <span class="w-2 h-2 rounded-full bg-purple-500"></span>
-          个人
-          <span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">5</span>
+          <span class="w-2 h-2 rounded-full bg-purple-500"></span>个人<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">5</span>
         </a>
-
         <button class="w-full mt-4 flex items-center gap-2 px-3 py-2 text-sm text-gray-500 hover:text-gray-900 transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
           新建工作区
         </button>
       </nav>
-
       <div class="p-4 border-t border-gray-200">
-        <a href="#" class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition">
+        <a href="#" onclick="showPage('settings')" class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
           设置
         </a>
@@ -62,8 +51,7 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 flex flex-col">
-      <!-- Top Bar -->
+    <main class="flex-1 flex flex-col relative">
       <header class="h-16 border-b border-gray-200 flex items-center justify-between px-8 bg-white">
         <div>
           <h1 class="text-xl font-bold text-gray-900">工作</h1>
@@ -74,14 +62,12 @@
             <option>按截止时间排序</option>
             <option>按创建时间排序</option>
           </select>
-          <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition">
+          <button onclick="showPage('new-task')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
             新建任务
           </button>
         </div>
       </header>
-
-      <!-- Filters -->
       <div class="px-8 py-4 border-b border-gray-200 bg-white">
         <div class="flex items-center gap-6 text-sm">
           <button class="font-medium text-indigo-600 border-b-2 border-indigo-600 pb-1">全部 <span class="text-gray-400 ml-1">10</span></button>
@@ -89,123 +75,401 @@
           <button class="font-medium text-gray-500 hover:text-gray-900 pb-1">已完成 <span class="text-gray-400 ml-1">7</span></button>
         </div>
       </div>
-
-      <!-- Task List -->
       <div class="flex-1 overflow-y-auto p-8 space-y-3 bg-gray-50/50">
-
-        <!-- Task 1 -->
+        <!-- 已完成任务 -->
         <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm hover:shadow-md transition group">
           <div class="flex items-start gap-4">
-            <div class="mt-1">
-              <div class="w-5 h-5 rounded border-2 border-indigo-600 bg-indigo-600 flex items-center justify-center">
-                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-              </div>
-            </div>
+            <div class="mt-1"><div class="w-5 h-5 rounded border-2 border-indigo-600 bg-indigo-600 flex items-center justify-center"><svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div></div>
             <div class="flex-1">
               <div class="flex items-start justify-between">
                 <h3 class="font-semibold text-gray-900 line-through text-gray-500">完成季度报告</h3>
                 <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
-                  <button class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                  <button onclick="showPage('edit-task')" class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
                   <button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
                 </div>
               </div>
               <p class="text-sm text-gray-500 mt-1 line-through">整理 Q2 的数据并生成 PPT</p>
-              <div class="flex items-center gap-4 mt-3 text-xs text-gray-400">
-                <span class="flex items-center gap-1">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                  截止：今天 18:00
-                </span>
-              </div>
+              <div class="flex items-center gap-4 mt-3 text-xs text-gray-400"><span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>截止：今天 18:00</span></div>
             </div>
           </div>
         </div>
-
-        <!-- Task 2 -->
+        <!-- 待办任务1 -->
         <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm hover:shadow-md transition group">
           <div class="flex items-start gap-4">
-            <div class="mt-1">
-              <div class="w-5 h-5 rounded border-2 border-gray-300 hover:border-indigo-600 cursor-pointer"></div>
-            </div>
+            <div class="mt-1"><div class="w-5 h-5 rounded border-2 border-gray-300 hover:border-indigo-600 cursor-pointer"></div></div>
             <div class="flex-1">
               <div class="flex items-start justify-between">
                 <h3 class="font-semibold text-gray-900">回复客户邮件</h3>
                 <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
-                  <button class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                  <button onclick="showPage('edit-task')" class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
                   <button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
                 </div>
               </div>
               <p class="text-sm text-gray-500 mt-1">关于下周合作方案的沟通</p>
               <div class="flex items-center gap-4 mt-3 text-xs">
-                <span class="flex items-center gap-1 text-amber-600 font-medium bg-amber-50 px-2 py-0.5 rounded">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                  截止：今天 15:00
-                </span>
-                <span class="flex items-center gap-1 text-indigo-600 font-medium bg-indigo-50 px-2 py-0.5 rounded">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                  14:30 提醒
-                </span>
+                <span class="flex items-center gap-1 text-amber-600 font-medium bg-amber-50 px-2 py-0.5 rounded"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>截止：今天 15:00</span>
+                <span class="flex items-center gap-1 text-indigo-600 font-medium bg-indigo-50 px-2 py-0.5 rounded"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>14:30 提醒</span>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- Task 3 -->
+        <!-- 待办任务2 -->
         <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm hover:shadow-md transition group">
           <div class="flex items-start gap-4">
-            <div class="mt-1">
-              <div class="w-5 h-5 rounded border-2 border-gray-300 hover:border-indigo-600 cursor-pointer"></div>
-            </div>
+            <div class="mt-1"><div class="w-5 h-5 rounded border-2 border-gray-300 hover:border-indigo-600 cursor-pointer"></div></div>
             <div class="flex-1">
               <div class="flex items-start justify-between">
                 <h3 class="font-semibold text-gray-900">团队周会准备</h3>
                 <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
-                  <button class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                  <button onclick="showPage('edit-task')" class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
                   <button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
                 </div>
               </div>
               <p class="text-sm text-gray-500 mt-1">收集各成员进度更新，整理会议议程</p>
               <div class="flex items-center gap-4 mt-3 text-xs">
-                <span class="flex items-center gap-1 text-gray-500">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                  截止：周五 10:00
-                </span>
-                <span class="flex items-center gap-1 text-emerald-600 font-medium bg-emerald-50 px-2 py-0.5 rounded">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                  每周一 / 周四 09:00 提醒
-                </span>
+                <span class="flex items-center gap-1 text-gray-500"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>截止：周五 10:00</span>
+                <span class="flex items-center gap-1 text-emerald-600 font-medium bg-emerald-50 px-2 py-0.5 rounded"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>每周一 / 周四 09:00 提醒</span>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- Task 4 -->
+        <!-- 待办任务3 -->
         <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm hover:shadow-md transition group">
           <div class="flex items-start gap-4">
-            <div class="mt-1">
-              <div class="w-5 h-5 rounded border-2 border-gray-300 hover:border-indigo-600 cursor-pointer"></div>
-            </div>
+            <div class="mt-1"><div class="w-5 h-5 rounded border-2 border-gray-300 hover:border-indigo-600 cursor-pointer"></div></div>
             <div class="flex-1">
               <div class="flex items-start justify-between">
                 <h3 class="font-semibold text-gray-900">更新项目文档</h3>
                 <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
-                  <button class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                  <button onclick="showPage('edit-task')" class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
                   <button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
                 </div>
               </div>
               <p class="text-sm text-gray-500 mt-1">补充 API 变更说明到技术文档</p>
-              <div class="flex items-center gap-4 mt-3 text-xs text-gray-400">
-                <span class="flex items-center gap-1">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                  截止：下周一 12:00
-                </span>
-              </div>
+              <div class="flex items-center gap-4 mt-3 text-xs text-gray-400"><span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>截止：下周一 12:00</span></div>
             </div>
           </div>
         </div>
-
       </div>
     </main>
+  </section>
+
+  <!-- ===== 2. 新建任务 ===== -->
+  <section id="new-task" class="page w-[1100px] h-[720px] bg-white rounded-xl shadow-2xl overflow-hidden flex border border-gray-200">
+    <aside class="w-64 bg-gray-50 border-r border-gray-200 flex flex-col">
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <span class="text-xl font-bold text-gray-900">WhenDo</span>
+        </div>
+      </div>
+      <nav class="flex-1 p-4 space-y-1">
+        <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 px-2">工作区</div>
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 bg-white rounded-lg border border-gray-200 shadow-sm text-gray-900 font-medium"><span class="w-2 h-2 rounded-full bg-blue-500"></span>工作<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">3</span></a>
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition"><span class="w-2 h-2 rounded-full bg-green-500"></span>家庭<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">2</span></a>
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition"><span class="w-2 h-2 rounded-full bg-purple-500"></span>个人<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">5</span></a>
+      </nav>
+    </aside>
+    <main class="flex-1 flex flex-col bg-white">
+      <header class="h-16 border-b border-gray-200 flex items-center px-8 bg-white">
+        <button onclick="showPage('main')" class="text-gray-500 hover:text-gray-900 flex items-center gap-1 text-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+          返回
+        </button>
+        <h1 class="ml-4 text-xl font-bold text-gray-900">新建任务</h1>
+      </header>
+      <div class="flex-1 overflow-y-auto p-8">
+        <div class="max-w-2xl space-y-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">任务标题</label>
+            <input type="text" placeholder="请输入任务标题" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">描述</label>
+            <textarea rows="4" placeholder="补充任务详情..." class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+          </div>
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">所属工作区</label>
+              <select class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option>工作</option>
+                <option>家庭</option>
+                <option>个人</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">截止时间</label>
+              <input type="datetime-local" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+          </div>
+          <div class="border-t border-gray-200 pt-6">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-sm font-semibold text-gray-900">提醒设置</h3>
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" checked class="sr-only peer">
+                <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+              </label>
+            </div>
+            <div class="grid grid-cols-2 gap-6">
+              <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">提醒类型</label>
+                <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  <option>单次提醒</option>
+                  <option>循环提醒</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">提醒时间</label>
+                <input type="datetime-local" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center justify-end gap-3 pt-4">
+            <button onclick="showPage('main')" class="px-5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition">取消</button>
+            <button onclick="showPage('main')" class="px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition">保存任务</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </section>
+
+  <!-- ===== 3. 编辑任务 ===== -->
+  <section id="edit-task" class="page w-[1100px] h-[720px] bg-white rounded-xl shadow-2xl overflow-hidden flex border border-gray-200">
+    <aside class="w-64 bg-gray-50 border-r border-gray-200 flex flex-col">
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <span class="text-xl font-bold text-gray-900">WhenDo</span>
+        </div>
+      </div>
+      <nav class="flex-1 p-4 space-y-1">
+        <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 px-2">工作区</div>
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 bg-white rounded-lg border border-gray-200 shadow-sm text-gray-900 font-medium"><span class="w-2 h-2 rounded-full bg-blue-500"></span>工作<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">3</span></a>
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition"><span class="w-2 h-2 rounded-full bg-green-500"></span>家庭<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">2</span></a>
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition"><span class="w-2 h-2 rounded-full bg-purple-500"></span>个人<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">5</span></a>
+      </nav>
+    </aside>
+    <main class="flex-1 flex flex-col bg-white">
+      <header class="h-16 border-b border-gray-200 flex items-center justify-between px-8 bg-white">
+        <div class="flex items-center">
+          <button onclick="showPage('main')" class="text-gray-500 hover:text-gray-900 flex items-center gap-1 text-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            返回
+          </button>
+          <h1 class="ml-4 text-xl font-bold text-gray-900">编辑任务</h1>
+        </div>
+        <button class="text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+          删除任务
+        </button>
+      </header>
+      <div class="flex-1 overflow-y-auto p-8">
+        <div class="max-w-2xl space-y-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">任务标题</label>
+            <input type="text" value="回复客户邮件" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">描述</label>
+            <textarea rows="4" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">关于下周合作方案的沟通，需要确认初步报价和排期。</textarea>
+          </div>
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">所属工作区</label>
+              <select class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option selected>工作</option>
+                <option>家庭</option>
+                <option>个人</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">截止时间</label>
+              <input type="datetime-local" value="2025-04-06T15:00" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+          </div>
+          <div class="border-t border-gray-200 pt-6">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-sm font-semibold text-gray-900">提醒设置</h3>
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" checked class="sr-only peer">
+                <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+              </label>
+            </div>
+            <div class="grid grid-cols-2 gap-6">
+              <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">提醒类型</label>
+                <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  <option selected>单次提醒</option>
+                  <option>循环提醒</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">提醒时间</label>
+                <input type="datetime-local" value="2025-04-06T14:30" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center justify-end gap-3 pt-4">
+            <button onclick="showPage('main')" class="px-5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition">取消</button>
+            <button onclick="showPage('main')" class="px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition">保存更改</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </section>
+
+  <!-- ===== 4. 设置页面 ===== -->
+  <section id="settings" class="page w-[1100px] h-[720px] bg-white rounded-xl shadow-2xl overflow-hidden flex border border-gray-200">
+    <aside class="w-64 bg-gray-50 border-r border-gray-200 flex flex-col">
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <span class="text-xl font-bold text-gray-900">WhenDo</span>
+        </div>
+      </div>
+      <nav class="flex-1 p-4 space-y-1">
+        <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 px-2">工作区</div>
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition"><span class="w-2 h-2 rounded-full bg-blue-500"></span>工作<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">3</span></a>
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition"><span class="w-2 h-2 rounded-full bg-green-500"></span>家庭<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">2</span></a>
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition"><span class="w-2 h-2 rounded-full bg-purple-500"></span>个人<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">5</span></a>
+      </nav>
+      <div class="p-4 border-t border-gray-200">
+        <a href="#" class="flex items-center gap-3 px-3 py-2 bg-white rounded-lg border border-gray-200 shadow-sm text-gray-900 font-medium transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          设置
+        </a>
+      </div>
+    </aside>
+    <main class="flex-1 flex flex-col bg-white">
+      <header class="h-16 border-b border-gray-200 flex items-center px-8 bg-white">
+        <button onclick="showPage('main')" class="text-gray-500 hover:text-gray-900 flex items-center gap-1 text-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+          返回
+        </button>
+        <h1 class="ml-4 text-xl font-bold text-gray-900">设置</h1>
+      </header>
+      <div class="flex-1 overflow-y-auto p-8">
+        <div class="max-w-2xl space-y-8">
+          <div>
+            <h3 class="text-sm font-semibold text-gray-900 mb-4">默认偏好</h3>
+            <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 space-y-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-sm font-medium text-gray-900">默认工作区</div>
+                  <div class="text-xs text-gray-500">启动应用时默认显示的工作区</div>
+                </div>
+                <select class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  <option>工作</option>
+                  <option>家庭</option>
+                  <option>个人</option>
+                </select>
+              </div>
+              <div class="border-t border-gray-200"></div>
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-sm font-medium text-gray-900">任务列表默认排序</div>
+                  <div class="text-xs text-gray-500">新建任务时的默认排序方式</div>
+                </div>
+                <select class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  <option>按截止时间排序</option>
+                  <option>按创建时间排序</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-sm font-semibold text-gray-900 mb-4">数据管理</h3>
+            <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 space-y-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-sm font-medium text-gray-900">导出数据</div>
+                  <div class="text-xs text-gray-500">将所有任务和提醒导出为 SQLite 备份文件</div>
+                </div>
+                <button class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">导出</button>
+              </div>
+              <div class="border-t border-gray-200"></div>
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-sm font-medium text-gray-900">导入数据</div>
+                  <div class="text-xs text-gray-500">从 SQLite 备份文件恢复数据</div>
+                </div>
+                <button class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">导入</button>
+              </div>
+              <div class="border-t border-gray-200"></div>
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-sm font-medium text-gray-900">清除已完成任务</div>
+                  <div class="text-xs text-gray-500">永久删除所有已标记为完成的任务</div>
+                </div>
+                <button class="px-4 py-2 text-sm font-medium text-red-600 bg-white border border-red-200 rounded-lg hover:bg-red-50 transition">清除</button>
+              </div>
+            </div>
+          </div>
+          <div class="text-xs text-gray-400">WhenDo v0.1.0</div>
+        </div>
+      </div>
+    </main>
+  </section>
+
+  <!-- ===== 5. 提醒弹窗 (全局覆盖层) ===== -->
+  <section id="reminder" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-2xl w-[420px] p-6 border border-gray-200">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center shrink-0">
+          <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+        </div>
+        <div class="flex-1">
+          <h2 class="text-lg font-bold text-gray-900">任务提醒</h2>
+          <p class="text-sm text-gray-500 mt-1">您有一个即将到期的任务需要处理</p>
+          <div class="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+            <div class="font-semibold text-gray-900">回复客户邮件</div>
+            <div class="text-xs text-gray-500 mt-1">关于下周合作方案的沟通</div>
+            <div class="text-xs text-amber-600 font-medium mt-2 flex items-center gap-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              截止：今天 15:00
+            </div>
+          </div>
+          <div class="mt-5 flex items-center gap-3 justify-end">
+            <button onclick="showPage('main')" class="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition">稍后提醒 (10分钟)</button>
+            <button onclick="showPage('main')" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition">知道了</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 底部快速跳转（演示用） -->
+  <div class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-white shadow-lg border border-gray-200 rounded-full px-4 py-2 flex items-center gap-2 z-40">
+    <button onclick="showPage('main')" class="px-3 py-1.5 text-sm font-medium rounded-full hover:bg-gray-100 transition">主界面</button>
+    <button onclick="showPage('new-task')" class="px-3 py-1.5 text-sm font-medium rounded-full hover:bg-gray-100 transition">新建</button>
+    <button onclick="showPage('edit-task')" class="px-3 py-1.5 text-sm font-medium rounded-full hover:bg-gray-100 transition">编辑</button>
+    <button onclick="showPage('settings')" class="px-3 py-1.5 text-sm font-medium rounded-full hover:bg-gray-100 transition">设置</button>
+    <button onclick="showPage('reminder')" class="px-3 py-1.5 text-sm font-medium rounded-full hover:bg-gray-100 transition">提醒弹窗</button>
   </div>
 
+  <script>
+    function showPage(id) {
+      // 隐藏所有 .page
+      document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+      // 处理 reminder 弹窗
+      const reminder = document.getElementById('reminder');
+      if (id === 'reminder') {
+        reminder.classList.remove('hidden');
+        reminder.classList.add('flex');
+        // 保持主界面显示在背后
+        document.getElementById('main').classList.add('active');
+      } else {
+        reminder.classList.add('hidden');
+        reminder.classList.remove('flex');
+        document.getElementById(id).classList.add('active');
+      }
+    }
+  </script>
 </body>
 </html>
