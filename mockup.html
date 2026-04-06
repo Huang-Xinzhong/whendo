@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhenDo - 主界面示例</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-100 h-screen flex items-center justify-center p-8">
+
+  <!-- App Window -->
+  <div class="w-[1100px] h-[720px] bg-white rounded-xl shadow-2xl overflow-hidden flex border border-gray-200">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-50 border-r border-gray-200 flex flex-col">
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <span class="text-xl font-bold text-gray-900">WhenDo</span>
+        </div>
+      </div>
+
+      <nav class="flex-1 p-4 space-y-1">
+        <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 px-2">工作区</div>
+
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 bg-white rounded-lg border border-gray-200 shadow-sm text-gray-900 font-medium">
+          <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+          工作
+          <span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">3</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition">
+          <span class="w-2 h-2 rounded-full bg-green-500"></span>
+          家庭
+          <span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">2</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition">
+          <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+          个人
+          <span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">5</span>
+        </a>
+
+        <button class="w-full mt-4 flex items-center gap-2 px-3 py-2 text-sm text-gray-500 hover:text-gray-900 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          新建工作区
+        </button>
+      </nav>
+
+      <div class="p-4 border-t border-gray-200">
+        <a href="#" class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          设置
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col">
+      <!-- Top Bar -->
+      <header class="h-16 border-b border-gray-200 flex items-center justify-between px-8 bg-white">
+        <div>
+          <h1 class="text-xl font-bold text-gray-900">工作</h1>
+          <p class="text-sm text-gray-500">今天有 2 个待办任务</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <select class="text-sm border border-gray-300 rounded-lg px-3 py-1.5 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option>按截止时间排序</option>
+            <option>按创建时间排序</option>
+          </select>
+          <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            新建任务
+          </button>
+        </div>
+      </header>
+
+      <!-- Filters -->
+      <div class="px-8 py-4 border-b border-gray-200 bg-white">
+        <div class="flex items-center gap-6 text-sm">
+          <button class="font-medium text-indigo-600 border-b-2 border-indigo-600 pb-1">全部 <span class="text-gray-400 ml-1">10</span></button>
+          <button class="font-medium text-gray-500 hover:text-gray-900 pb-1">未完成 <span class="text-gray-400 ml-1">3</span></button>
+          <button class="font-medium text-gray-500 hover:text-gray-900 pb-1">已完成 <span class="text-gray-400 ml-1">7</span></button>
+        </div>
+      </div>
+
+      <!-- Task List -->
+      <div class="flex-1 overflow-y-auto p-8 space-y-3 bg-gray-50/50">
+
+        <!-- Task 1 -->
+        <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm hover:shadow-md transition group">
+          <div class="flex items-start gap-4">
+            <div class="mt-1">
+              <div class="w-5 h-5 rounded border-2 border-indigo-600 bg-indigo-600 flex items-center justify-center">
+                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+              </div>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-start justify-between">
+                <h3 class="font-semibold text-gray-900 line-through text-gray-500">完成季度报告</h3>
+                <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
+                  <button class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                  <button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                </div>
+              </div>
+              <p class="text-sm text-gray-500 mt-1 line-through">整理 Q2 的数据并生成 PPT</p>
+              <div class="flex items-center gap-4 mt-3 text-xs text-gray-400">
+                <span class="flex items-center gap-1">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  截止：今天 18:00
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 2 -->
+        <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm hover:shadow-md transition group">
+          <div class="flex items-start gap-4">
+            <div class="mt-1">
+              <div class="w-5 h-5 rounded border-2 border-gray-300 hover:border-indigo-600 cursor-pointer"></div>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-start justify-between">
+                <h3 class="font-semibold text-gray-900">回复客户邮件</h3>
+                <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
+                  <button class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                  <button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                </div>
+              </div>
+              <p class="text-sm text-gray-500 mt-1">关于下周合作方案的沟通</p>
+              <div class="flex items-center gap-4 mt-3 text-xs">
+                <span class="flex items-center gap-1 text-amber-600 font-medium bg-amber-50 px-2 py-0.5 rounded">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  截止：今天 15:00
+                </span>
+                <span class="flex items-center gap-1 text-indigo-600 font-medium bg-indigo-50 px-2 py-0.5 rounded">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                  14:30 提醒
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 3 -->
+        <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm hover:shadow-md transition group">
+          <div class="flex items-start gap-4">
+            <div class="mt-1">
+              <div class="w-5 h-5 rounded border-2 border-gray-300 hover:border-indigo-600 cursor-pointer"></div>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-start justify-between">
+                <h3 class="font-semibold text-gray-900">团队周会准备</h3>
+                <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
+                  <button class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                  <button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                </div>
+              </div>
+              <p class="text-sm text-gray-500 mt-1">收集各成员进度更新，整理会议议程</p>
+              <div class="flex items-center gap-4 mt-3 text-xs">
+                <span class="flex items-center gap-1 text-gray-500">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  截止：周五 10:00
+                </span>
+                <span class="flex items-center gap-1 text-emerald-600 font-medium bg-emerald-50 px-2 py-0.5 rounded">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                  每周一 / 周四 09:00 提醒
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 4 -->
+        <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm hover:shadow-md transition group">
+          <div class="flex items-start gap-4">
+            <div class="mt-1">
+              <div class="w-5 h-5 rounded border-2 border-gray-300 hover:border-indigo-600 cursor-pointer"></div>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-start justify-between">
+                <h3 class="font-semibold text-gray-900">更新项目文档</h3>
+                <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
+                  <button class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                  <button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                </div>
+              </div>
+              <p class="text-sm text-gray-500 mt-1">补充 API 变更说明到技术文档</p>
+              <div class="flex items-center gap-4 mt-3 text-xs text-gray-400">
+                <span class="flex items-center gap-1">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  截止：下周一 12:00
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>
