@@ -28,14 +28,14 @@
       </div>
       <nav class="flex-1 p-4 space-y-1">
         <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 px-2">工作区</div>
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 bg-white rounded-lg border border-gray-200 shadow-sm text-gray-900 font-medium">
-          <span class="w-2 h-2 rounded-full bg-blue-500"></span>工作<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">3</span>
+        <a href="#" onclick="renderWorkspace('工作')" class="flex items-center gap-3 px-3 py-2.5 bg-white rounded-lg border border-gray-200 shadow-sm text-gray-900 font-medium">
+          <span class="w-2 h-2 rounded-full bg-blue-500"></span>工作<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full workspace-count">3</span>
         </a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition">
-          <span class="w-2 h-2 rounded-full bg-green-500"></span>家庭<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">2</span>
+        <a href="#" onclick="renderWorkspace('家庭')" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition">
+          <span class="w-2 h-2 rounded-full bg-green-500"></span>家庭<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full workspace-count">2</span>
         </a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition">
-          <span class="w-2 h-2 rounded-full bg-purple-500"></span>个人<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">5</span>
+        <a href="#" onclick="renderWorkspace('个人')" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition">
+          <span class="w-2 h-2 rounded-full bg-purple-500"></span>个人<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full workspace-count">5</span>
         </a>
         <button class="w-full mt-4 flex items-center gap-2 px-3 py-2 text-sm text-gray-500 hover:text-gray-900 transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
@@ -54,8 +54,8 @@
     <main class="flex-1 flex flex-col relative">
       <header class="h-16 border-b border-gray-200 flex items-center justify-between px-8 bg-white">
         <div>
-          <h1 class="text-xl font-bold text-gray-900">工作</h1>
-          <p class="text-sm text-gray-500">今天有 2 个待办任务</p>
+          <h1 id="workspace-title" class="text-xl font-bold text-gray-900">工作</h1>
+          <p id="workspace-subtitle" class="text-sm text-gray-500">今天有 2 个待办任务</p>
         </div>
         <div class="flex items-center gap-3">
           <select class="text-sm border border-gray-300 rounded-lg px-3 py-1.5 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -70,12 +70,12 @@
       </header>
       <div class="px-8 py-4 border-b border-gray-200 bg-white">
         <div class="flex items-center gap-6 text-sm">
-          <button class="font-medium text-indigo-600 border-b-2 border-indigo-600 pb-1">全部 <span class="text-gray-400 ml-1">10</span></button>
-          <button class="font-medium text-gray-500 hover:text-gray-900 pb-1">未完成 <span class="text-gray-400 ml-1">3</span></button>
-          <button class="font-medium text-gray-500 hover:text-gray-900 pb-1">已完成 <span class="text-gray-400 ml-1">7</span></button>
+          <button class="font-medium text-indigo-600 border-b-2 border-indigo-600 pb-1">全部 <span id="stat-all" class="text-gray-400 ml-1">10</span></button>
+          <button class="font-medium text-gray-500 hover:text-gray-900 pb-1">未完成 <span id="stat-undone" class="text-gray-400 ml-1">3</span></button>
+          <button class="font-medium text-gray-500 hover:text-gray-900 pb-1">已完成 <span id="stat-done" class="text-gray-400 ml-1">7</span></button>
         </div>
       </div>
-      <div class="flex-1 overflow-y-auto p-8 space-y-3 bg-gray-50/50">
+      <div id="task-list" class="flex-1 overflow-y-auto p-8 space-y-3 bg-gray-50/50">
         <!-- 已完成任务 -->
         <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm hover:shadow-md transition group">
           <div class="flex items-start gap-4">
@@ -83,7 +83,7 @@
             <div class="flex-1">
               <div class="flex items-start justify-between">
                 <h3 class="font-semibold text-gray-900 line-through text-gray-500">完成季度报告</h3>
-                <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
+                <div class="flex items-center gap-2 transition">
                   <button onclick="openModal('edit-task-modal')" class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
                   <button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
                 </div>
@@ -100,7 +100,7 @@
             <div class="flex-1">
               <div class="flex items-start justify-between">
                 <h3 class="font-semibold text-gray-900">回复客户邮件</h3>
-                <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
+                <div class="flex items-center gap-2 transition">
                   <button onclick="openModal('edit-task-modal')" class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
                   <button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
                 </div>
@@ -120,7 +120,7 @@
             <div class="flex-1">
               <div class="flex items-start justify-between">
                 <h3 class="font-semibold text-gray-900">团队周会准备</h3>
-                <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
+                <div class="flex items-center gap-2 transition">
                   <button onclick="openModal('edit-task-modal')" class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
                   <button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
                 </div>
@@ -140,7 +140,7 @@
             <div class="flex-1">
               <div class="flex items-start justify-between">
                 <h3 class="font-semibold text-gray-900">更新项目文档</h3>
-                <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
+                <div class="flex items-center gap-2 transition">
                   <button onclick="openModal('edit-task-modal')" class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
                   <button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
                 </div>
@@ -297,9 +297,9 @@
       </div>
       <nav class="flex-1 p-4 space-y-1">
         <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 px-2">工作区</div>
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition"><span class="w-2 h-2 rounded-full bg-blue-500"></span>工作<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">3</span></a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition"><span class="w-2 h-2 rounded-full bg-green-500"></span>家庭<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">2</span></a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition"><span class="w-2 h-2 rounded-full bg-purple-500"></span>个人<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">5</span></a>
+        <a href="#" onclick="showPage('main'); renderWorkspace('工作')" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition"><span class="w-2 h-2 rounded-full bg-blue-500"></span>工作<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full workspace-count">3</span></a>
+        <a href="#" onclick="showPage('main'); renderWorkspace('家庭')" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition"><span class="w-2 h-2 rounded-full bg-green-500"></span>家庭<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full workspace-count">2</span></a>
+        <a href="#" onclick="showPage('main'); renderWorkspace('个人')" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition"><span class="w-2 h-2 rounded-full bg-purple-500"></span>个人<span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full workspace-count">5</span></a>
       </nav>
       <div class="p-4 border-t border-gray-200">
         <a href="#" class="flex items-center gap-3 px-3 py-2 bg-white rounded-lg border border-gray-200 shadow-sm text-gray-900 font-medium transition">
@@ -416,20 +416,176 @@
   </div>
 
   <script>
+    const workspaceData = {
+      '工作': {
+        pendingCount: 2,
+        tasks: [
+          { title: '完成季度报告', desc: '整理 Q2 的数据并生成 PPT', done: true, deadline: '今天 18:00', badge: null, remind: null, pausedToday: false },
+          { title: '回复客户邮件', desc: '关于下周合作方案的沟通', done: false, deadline: '今天 15:00', badge: 'amber', remind: '14:30 提醒', pausedToday: false },
+          { title: '团队周会准备', desc: '收集各成员进度更新，整理会议议程', done: false, deadline: '周五 10:00', badge: null, remind: '每周一 / 周四 09:00 提醒', pausedToday: false },
+          { title: '更新项目文档', desc: '补充 API 变更说明到技术文档', done: false, deadline: '下周一 12:00', badge: null, remind: null, pausedToday: false },
+          { title: '代码审查', desc: '审查前端组的 PR 并给出反馈意见', done: false, deadline: '明天 14:00', badge: null, remind: '10:00 提醒', pausedToday: true },
+          { title: '季度目标对齐会', desc: '与产品经理确认 Q3 优先级', done: true, deadline: '昨天 16:00', badge: null, remind: null, pausedToday: false }
+        ]
+      },
+      '家庭': {
+        pendingCount: 1,
+        tasks: [
+          { title: '缴纳物业费', desc: '第二季度物业费 580 元', done: false, deadline: '明天', badge: 'amber', remind: '19:00 提醒', pausedToday: false },
+          { title: '采购周末食材', desc: '牛肉、蔬菜、牛奶、水果', done: false, deadline: '周六 10:00', badge: null, remind: null, pausedToday: false },
+          { title: '订机票', desc: '五一假期回老家的往返机票', done: true, deadline: '已完成', badge: null, remind: null, pausedToday: false },
+          { title: '更换净水器滤芯', desc: '厨房台下净水器 3 号滤芯', done: false, deadline: '周日', badge: null, remind: '15:00 提醒', pausedToday: false }
+        ]
+      },
+      '个人': {
+        pendingCount: 3,
+        tasks: [
+          { title: '晨跑 5 公里', desc: '配速控制在 6 分钟以内', done: false, deadline: '每天 07:00', badge: null, remind: '06:30 提醒', pausedToday: false },
+          { title: '阅读《深度学习》', desc: '完成第三章并做笔记', done: false, deadline: '周日', badge: null, remind: null, pausedToday: false },
+          { title: '预约牙医', desc: '半年一次的洗牙检查', done: false, deadline: '4 月 15 日', badge: 'amber', remind: '前一天 18:00 提醒', pausedToday: false },
+          { title: '整理相册', desc: '备份手机照片到 NAS', done: true, deadline: '已完成', badge: null, remind: null, pausedToday: false },
+          { title: '买生日礼物', desc: '给妈妈的生日礼物挑选', done: false, deadline: '4 月 12 日', badge: null, remind: '10:00 提醒', pausedToday: false },
+          { title: '学习吉他', desc: '练习《晴天》前奏指法', done: true, deadline: '已完成', badge: null, remind: null, pausedToday: false }
+        ]
+      }
+    };
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function renderTask(wsName, task) {
+      const titleEsc = escapeHtml(task.title);
+      const rightAction = (() => {
+        if (task.done) {
+          return `<div class="px-3 py-1.5 rounded-lg bg-emerald-100 text-emerald-700 text-xs font-medium">已完成</div>`;
+        }
+        if (task.remind) {
+          if (task.pausedToday) {
+            return `<button onclick="togglePause('${wsName}','${titleEsc}')" class="px-3 py-1.5 rounded-lg bg-amber-500 text-white text-xs font-medium cursor-pointer transition" title="恢复提醒">已暂停</button>`;
+          }
+          return `<button onclick="togglePause('${wsName}','${titleEsc}')" class="px-3 py-1.5 rounded-lg border border-amber-500 text-amber-600 hover:bg-amber-500 hover:text-white text-xs font-medium cursor-pointer transition" title="暂停今日提醒">暂停</button>`;
+        }
+        return `<button onclick="completeTask('${wsName}','${titleEsc}')" class="px-3 py-1.5 rounded-lg border border-emerald-500 text-emerald-600 hover:bg-emerald-500 hover:text-white text-xs font-medium cursor-pointer transition" title="完成任务">完成</button>`;
+      })();
+
+      const topActions = `
+        <div class="flex items-center gap-2 transition">
+          <button onclick="openModal('edit-task-modal')" class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+          <button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+        </div>`;
+
+      if (task.done) {
+        return `
+          <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm hover:shadow-md transition group">
+            <div class="flex items-start gap-4">
+              <div class="flex-1">
+                <h3 class="font-semibold line-through text-gray-500">${titleEsc}</h3>
+                <p class="text-sm text-gray-500 mt-1 line-through">${escapeHtml(task.desc)}</p>
+                <div class="flex items-center gap-4 mt-3 text-xs text-gray-400"><span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>截止：${task.deadline}</span></div>
+              </div>
+              <div class="flex flex-col justify-between self-stretch">
+                ${topActions}
+                <div class="flex items-end justify-end">${rightAction}</div>
+              </div>
+            </div>
+          </div>`;
+      } else {
+        let badges = '';
+        if (task.badge === 'amber') {
+          badges += `<span class="flex items-center gap-1 text-amber-600 font-medium bg-amber-50 px-2 py-0.5 rounded"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>截止：${task.deadline}</span>`;
+        } else {
+          badges += `<span class="flex items-center gap-1 text-gray-500"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>截止：${task.deadline}</span>`;
+        }
+        if (task.remind) {
+          if (task.remind.includes('每周')) {
+            badges += `<span class="flex items-center gap-1 text-emerald-600 font-medium bg-emerald-50 px-2 py-0.5 rounded"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>${task.remind}</span>`;
+          } else {
+            badges += `<span class="flex items-center gap-1 text-indigo-600 font-medium bg-indigo-50 px-2 py-0.5 rounded"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>${task.remind}</span>`;
+          }
+        }
+        return `
+          <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm hover:shadow-md transition group">
+            <div class="flex items-start gap-4">
+              <div class="flex-1">
+                <h3 class="font-semibold text-gray-900">${titleEsc}</h3>
+                <p class="text-sm text-gray-500 mt-1">${escapeHtml(task.desc)}</p>
+                <div class="flex items-center gap-4 mt-3 text-xs">${badges}</div>
+              </div>
+              <div class="flex flex-col justify-between self-stretch">
+                ${topActions}
+                <div class="flex items-end justify-end">${rightAction}</div>
+              </div>
+            </div>
+          </div>`;
+      }
+    }
+
+    function renderWorkspace(name) {
+      const data = workspaceData[name];
+      if (!data) return;
+
+      const navMap = { '工作': 0, '家庭': 1, '个人': 2 };
+      const navLinks = document.querySelectorAll('#main nav > a[href="#"]');
+      navLinks.forEach((el, idx) => {
+        if (idx === navMap[name]) {
+          el.className = 'flex items-center gap-3 px-3 py-2.5 bg-white rounded-lg border border-gray-200 shadow-sm text-gray-900 font-medium';
+        } else {
+          el.className = 'flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition';
+        }
+      });
+
+      document.getElementById('workspace-title').textContent = name;
+      document.getElementById('workspace-subtitle').textContent = `今天有 ${data.pendingCount} 个待办任务`;
+
+      const allCount = data.tasks.length;
+      const doneCount = data.tasks.filter(t => t.done).length;
+      const undoneCount = allCount - doneCount;
+      document.getElementById('stat-all').textContent = allCount;
+      document.getElementById('stat-undone').textContent = undoneCount;
+      document.getElementById('stat-done').textContent = doneCount;
+
+      document.getElementById('task-list').innerHTML = data.tasks.map(t => renderTask(name, t)).join('');
+
+      ['工作','家庭','个人'].forEach(ws => {
+        const count = workspaceData[ws].tasks.length;
+        document.querySelectorAll('aside nav > a').forEach(link => {
+          if (link.textContent.includes(ws)) {
+            const badge = link.querySelector('span.workspace-count');
+            if (badge) badge.textContent = count;
+          }
+        });
+      });
+    }
+
+    function completeTask(wsName, taskTitle) {
+      const task = workspaceData[wsName].tasks.find(t => t.title === taskTitle);
+      if (task) {
+        task.done = true;
+        renderWorkspace(wsName);
+      }
+    }
+
+    function togglePause(wsName, taskTitle) {
+      const task = workspaceData[wsName].tasks.find(t => t.title === taskTitle);
+      if (task) {
+        task.pausedToday = !task.pausedToday;
+        renderWorkspace(wsName);
+      }
+    }
+
     function showPage(id) {
-      // 隐藏所有 .page
       document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
-      // 关闭所有 modal
       document.querySelectorAll('.fixed.z-50').forEach(el => {
         el.classList.add('hidden');
         el.classList.remove('flex');
       });
-      // 处理 reminder 弹窗
       const reminder = document.getElementById('reminder');
       if (id === 'reminder') {
         reminder.classList.remove('hidden');
         reminder.classList.add('flex');
-        // 保持主界面显示在背后
         document.getElementById('main').classList.add('active');
       } else {
         reminder.classList.add('hidden');
@@ -449,6 +605,8 @@
       el.classList.add('hidden');
       el.classList.remove('flex');
     }
+
+    renderWorkspace('工作');
   </script>
 </body>
 </html>

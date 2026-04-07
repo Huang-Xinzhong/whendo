@@ -32,6 +32,7 @@
 - [ ] 编辑任务
 - [ ] 删除任务
 - [ ] 标记任务为已完成 / 未完成
+  - **快捷操作按钮**：任务列表左侧提供一键操作。普通待办显示“完成”按钮；带定时提醒的任务显示“暂停”按钮，可临时暂停当日提醒，再次点击恢复，次日自动恢复正常触发。
 - [ ] 按状态筛选（全部 / 未完成 / 已完成）
 
 #### 定时提醒模块
@@ -40,6 +41,7 @@
 - [ ] 应用内弹窗提醒（倒计时到期后在前端弹出提示）
 - [ ] 提醒关联具体任务，点击弹窗可跳转任务详情
 - [ ] 关闭或延迟（Snooze）提醒
+- [ ] 暂停今日提醒：任务列表左侧暂停按钮可将当日提醒静音，次日自动恢复正常触发
 
 #### 设置模块
 - [ ] 默认工作区设置
@@ -134,6 +136,7 @@
 | `interval_unit` | TEXT | 循环间隔单位：`minute`, `hour`, `day`, `week`, `month` |
 | `is_enabled` | BOOLEAN DEFAULT 1 | 是否启用 |
 | `next_trigger_at` | DATETIME | 下次触发时间（调度器用） |
+| `paused_date` | DATE | 当日暂停日期（YYYY-MM-DD），调度器遇到该日期跳过触发，次日自动恢复 |
 | `created_at` | DATETIME DEFAULT CURRENT_TIMESTAMP | 创建时间 |
 | `updated_at` | DATETIME DEFAULT CURRENT_TIMESTAMP | 更新时间 |
 
