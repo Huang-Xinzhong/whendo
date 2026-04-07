@@ -182,29 +182,82 @@
             </select>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">截止时间</label>
-            <input type="datetime-local" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <label class="block text-sm font-medium text-gray-700 mb-1">任务类型</label>
+            <select id="new-task-type" onchange="toggleNewTaskType()" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="todo">代办</option>
+              <option value="reminder">定时提醒</option>
+            </select>
           </div>
         </div>
         <div class="border-t border-gray-200 pt-5">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="text-sm font-semibold text-gray-900">提醒设置</h3>
-            <label class="inline-flex items-center cursor-pointer">
-              <input type="checkbox" checked class="sr-only peer">
-              <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
-            </label>
+          <!-- 代办：截止时间 + 提醒时间 -->
+          <div id="new-todo-fields" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">截止时间</label>
+                <input type="datetime-local" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">提醒时间</label>
+                <input type="datetime-local" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              </div>
+            </div>
           </div>
-          <div class="grid grid-cols-2 gap-4">
+          <!-- 定时提醒：时间范围 + 周期 + 重复模式 -->
+          <div id="new-reminder-fields" class="hidden space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">开始时间</label>
+                <input type="time" value="09:00" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">结束时间</label>
+                <input type="time" value="18:00" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              </div>
+            </div>
             <div>
-              <label class="block text-xs font-medium text-gray-500 mb-1">提醒类型</label>
+              <label class="block text-xs font-medium text-gray-500 mb-1">提醒周期</label>
               <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <option>单次提醒</option>
-                <option>循环提醒</option>
+                <option value="15">每 15 分钟</option>
+                <option value="30" selected>每 30 分钟</option>
+                <option value="60">每小时</option>
+                <option value="120">每 2 小时</option>
               </select>
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-500 mb-1">提醒时间</label>
-              <input type="datetime-local" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <label class="block text-xs font-medium text-gray-500 mb-1">重复模式</label>
+              <select id="new-recurring-pattern" onchange="toggleNewRecurringPattern()" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="daily">每天</option>
+                <option value="workday">每个工作日</option>
+                <option value="weekly">每周（自定义）</option>
+                <option value="monthly">每月（自定义）</option>
+              </select>
+            </div>
+            <!-- 每周 -->
+            <div id="new-weekly-days" class="hidden">
+              <label class="block text-xs font-medium text-gray-500 mb-2">选择星期几</label>
+              <div class="flex flex-wrap gap-2">
+                <label class="cursor-pointer"><input type="checkbox" checked class="peer sr-only"><span class="px-2.5 py-1 rounded-full border border-gray-300 text-xs text-gray-600 peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 transition">周一</span></label>
+                <label class="cursor-pointer"><input type="checkbox" checked class="peer sr-only"><span class="px-2.5 py-1 rounded-full border border-gray-300 text-xs text-gray-600 peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 transition">周二</span></label>
+                <label class="cursor-pointer"><input type="checkbox" checked class="peer sr-only"><span class="px-2.5 py-1 rounded-full border border-gray-300 text-xs text-gray-600 peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 transition">周三</span></label>
+                <label class="cursor-pointer"><input type="checkbox" checked class="peer sr-only"><span class="px-2.5 py-1 rounded-full border border-gray-300 text-xs text-gray-600 peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 transition">周四</span></label>
+                <label class="cursor-pointer"><input type="checkbox" checked class="peer sr-only"><span class="px-2.5 py-1 rounded-full border border-gray-300 text-xs text-gray-600 peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 transition">周五</span></label>
+                <label class="cursor-pointer"><input type="checkbox" class="peer sr-only"><span class="px-2.5 py-1 rounded-full border border-gray-300 text-xs text-gray-600 peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 transition">周六</span></label>
+                <label class="cursor-pointer"><input type="checkbox" class="peer sr-only"><span class="px-2.5 py-1 rounded-full border border-gray-300 text-xs text-gray-600 peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 transition">周日</span></label>
+              </div>
+            </div>
+            <!-- 每月 -->
+            <div id="new-monthly-day" class="hidden">
+              <label class="block text-xs font-medium text-gray-500 mb-1">每月几号</label>
+              <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option>1 号</option><option>2 号</option><option>3 号</option><option>4 号</option><option>5 号</option>
+                <option>6 号</option><option>7 号</option><option>8 号</option><option>9 号</option><option>10 号</option>
+                <option>11 号</option><option>12 号</option><option>13 号</option><option>14 号</option><option selected>15 号</option>
+                <option>16 号</option><option>17 号</option><option>18 号</option><option>19 号</option><option>20 号</option>
+                <option>21 号</option><option>22 号</option><option>23 号</option><option>24 号</option><option>25 号</option>
+                <option>26 号</option><option>27 号</option><option>28 号</option><option>29 号</option><option>30 号</option>
+                <option>31 号</option>
+              </select>
             </div>
           </div>
         </div>
@@ -244,29 +297,82 @@
             </select>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">截止时间</label>
-            <input type="datetime-local" value="2025-04-06T15:00" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <label class="block text-sm font-medium text-gray-700 mb-1">任务类型</label>
+            <select id="edit-task-type" onchange="toggleEditTaskType()" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="todo">代办</option>
+              <option value="reminder" selected>定时提醒</option>
+            </select>
           </div>
         </div>
         <div class="border-t border-gray-200 pt-5">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="text-sm font-semibold text-gray-900">提醒设置</h3>
-            <label class="inline-flex items-center cursor-pointer">
-              <input type="checkbox" checked class="sr-only peer">
-              <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
-            </label>
+          <!-- 代办：截止时间 + 提醒时间 -->
+          <div id="edit-todo-fields" class="hidden space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">截止时间</label>
+                <input type="datetime-local" value="2025-04-06T15:00" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">提醒时间</label>
+                <input type="datetime-local" value="2025-04-06T14:30" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              </div>
+            </div>
           </div>
-          <div class="grid grid-cols-2 gap-4">
+          <!-- 定时提醒：时间范围 + 周期 + 重复模式 -->
+          <div id="edit-reminder-fields" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">开始时间</label>
+                <input type="time" value="09:00" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">结束时间</label>
+                <input type="time" value="18:00" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              </div>
+            </div>
             <div>
-              <label class="block text-xs font-medium text-gray-500 mb-1">提醒类型</label>
+              <label class="block text-xs font-medium text-gray-500 mb-1">提醒周期</label>
               <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <option selected>单次提醒</option>
-                <option>循环提醒</option>
+                <option value="15">每 15 分钟</option>
+                <option value="30" selected>每 30 分钟</option>
+                <option value="60">每小时</option>
+                <option value="120">每 2 小时</option>
               </select>
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-500 mb-1">提醒时间</label>
-              <input type="datetime-local" value="2025-04-06T14:30" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <label class="block text-xs font-medium text-gray-500 mb-1">重复模式</label>
+              <select id="edit-recurring-pattern" onchange="toggleEditRecurringPattern()" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="daily">每天</option>
+                <option value="workday">每个工作日</option>
+                <option value="weekly">每周（自定义）</option>
+                <option value="monthly" selected>每月（自定义）</option>
+              </select>
+            </div>
+            <!-- 每周 -->
+            <div id="edit-weekly-days" class="hidden">
+              <label class="block text-xs font-medium text-gray-500 mb-2">选择星期几</label>
+              <div class="flex flex-wrap gap-2">
+                <label class="cursor-pointer"><input type="checkbox" checked class="peer sr-only"><span class="px-2.5 py-1 rounded-full border border-gray-300 text-xs text-gray-600 peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 transition">周一</span></label>
+                <label class="cursor-pointer"><input type="checkbox" checked class="peer sr-only"><span class="px-2.5 py-1 rounded-full border border-gray-300 text-xs text-gray-600 peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 transition">周二</span></label>
+                <label class="cursor-pointer"><input type="checkbox" checked class="peer sr-only"><span class="px-2.5 py-1 rounded-full border border-gray-300 text-xs text-gray-600 peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 transition">周三</span></label>
+                <label class="cursor-pointer"><input type="checkbox" checked class="peer sr-only"><span class="px-2.5 py-1 rounded-full border border-gray-300 text-xs text-gray-600 peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 transition">周四</span></label>
+                <label class="cursor-pointer"><input type="checkbox" checked class="peer sr-only"><span class="px-2.5 py-1 rounded-full border border-gray-300 text-xs text-gray-600 peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 transition">周五</span></label>
+                <label class="cursor-pointer"><input type="checkbox" class="peer sr-only"><span class="px-2.5 py-1 rounded-full border border-gray-300 text-xs text-gray-600 peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 transition">周六</span></label>
+                <label class="cursor-pointer"><input type="checkbox" class="peer sr-only"><span class="px-2.5 py-1 rounded-full border border-gray-300 text-xs text-gray-600 peer-checked:bg-indigo-600 peer-checked:text-white peer-checked:border-indigo-600 transition">周日</span></label>
+              </div>
+            </div>
+            <!-- 每月 -->
+            <div id="edit-monthly-day" class="hidden">
+              <label class="block text-xs font-medium text-gray-500 mb-1">每月几号</label>
+              <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option>1 号</option><option>2 号</option><option>3 号</option><option>4 号</option><option>5 号</option>
+                <option>6 号</option><option>7 号</option><option>8 号</option><option>9 号</option><option>10 号</option>
+                <option>11 号</option><option>12 号</option><option>13 号</option><option>14 号</option><option selected>15 号</option>
+                <option>16 号</option><option>17 号</option><option>18 号</option><option>19 号</option><option>20 号</option>
+                <option>21 号</option><option>22 号</option><option>23 号</option><option>24 号</option><option>25 号</option>
+                <option>26 号</option><option>27 号</option><option>28 号</option><option>29 号</option><option>30 号</option>
+                <option>31 号</option>
+              </select>
             </div>
           </div>
         </div>
@@ -418,34 +524,32 @@
   <script>
     const workspaceData = {
       '工作': {
-        pendingCount: 2,
+        pendingCount: 3,
         tasks: [
-          { title: '完成季度报告', desc: '整理 Q2 的数据并生成 PPT', done: true, deadline: '今天 18:00', badge: null, remind: null, pausedToday: false },
-          { title: '回复客户邮件', desc: '关于下周合作方案的沟通', done: false, deadline: '今天 15:00', badge: 'amber', remind: '14:30 提醒', pausedToday: false },
-          { title: '团队周会准备', desc: '收集各成员进度更新，整理会议议程', done: false, deadline: '周五 10:00', badge: null, remind: '每周一 / 周四 09:00 提醒', pausedToday: false },
-          { title: '更新项目文档', desc: '补充 API 变更说明到技术文档', done: false, deadline: '下周一 12:00', badge: null, remind: null, pausedToday: false },
-          { title: '代码审查', desc: '审查前端组的 PR 并给出反馈意见', done: false, deadline: '明天 14:00', badge: null, remind: '10:00 提醒', pausedToday: true },
-          { title: '季度目标对齐会', desc: '与产品经理确认 Q3 优先级', done: true, deadline: '昨天 16:00', badge: null, remind: null, pausedToday: false }
+          { title: '完成季度报告', desc: '整理 Q2 的数据并生成 PPT', done: true, type: 'todo', deadline: '今天 18:00', badge: null, remind: null, pausedToday: false },
+          { title: '回复客户邮件', desc: '关于下周合作方案的沟通', done: false, type: 'reminder', deadline: '今天 15:00', badge: 'amber', remind: '14:30 提醒', pausedToday: false },
+          { title: '团队周会准备', desc: '收集各成员进度更新，整理会议议程', done: false, type: 'reminder', deadline: '周五 10:00', badge: null, remind: '每周一 / 周四 09:00 提醒', pausedToday: false },
+          { title: '喝水提醒', desc: '每半个小时喝一次水，保持身体水分', done: false, type: 'reminder', deadline: '全天', badge: null, remind: '每 30 分钟提醒', pausedToday: false }
         ]
       },
       '家庭': {
         pendingCount: 1,
         tasks: [
-          { title: '缴纳物业费', desc: '第二季度物业费 580 元', done: false, deadline: '明天', badge: 'amber', remind: '19:00 提醒', pausedToday: false },
-          { title: '采购周末食材', desc: '牛肉、蔬菜、牛奶、水果', done: false, deadline: '周六 10:00', badge: null, remind: null, pausedToday: false },
-          { title: '订机票', desc: '五一假期回老家的往返机票', done: true, deadline: '已完成', badge: null, remind: null, pausedToday: false },
-          { title: '更换净水器滤芯', desc: '厨房台下净水器 3 号滤芯', done: false, deadline: '周日', badge: null, remind: '15:00 提醒', pausedToday: false }
+          { title: '缴纳物业费', desc: '第二季度物业费 580 元', done: false, type: 'reminder', deadline: '明天', badge: 'amber', remind: '19:00 提醒', pausedToday: false },
+          { title: '采购周末食材', desc: '牛肉、蔬菜、牛奶、水果', done: false, type: 'todo', deadline: '周六 10:00', badge: null, remind: null, pausedToday: false },
+          { title: '订机票', desc: '五一假期回老家的往返机票', done: true, type: 'todo', deadline: '已完成', badge: null, remind: null, pausedToday: false },
+          { title: '更换净水器滤芯', desc: '厨房台下净水器 3 号滤芯', done: false, type: 'reminder', deadline: '周日', badge: null, remind: '15:00 提醒', pausedToday: false }
         ]
       },
       '个人': {
         pendingCount: 3,
         tasks: [
-          { title: '晨跑 5 公里', desc: '配速控制在 6 分钟以内', done: false, deadline: '每天 07:00', badge: null, remind: '06:30 提醒', pausedToday: false },
-          { title: '阅读《深度学习》', desc: '完成第三章并做笔记', done: false, deadline: '周日', badge: null, remind: null, pausedToday: false },
-          { title: '预约牙医', desc: '半年一次的洗牙检查', done: false, deadline: '4 月 15 日', badge: 'amber', remind: '前一天 18:00 提醒', pausedToday: false },
-          { title: '整理相册', desc: '备份手机照片到 NAS', done: true, deadline: '已完成', badge: null, remind: null, pausedToday: false },
-          { title: '买生日礼物', desc: '给妈妈的生日礼物挑选', done: false, deadline: '4 月 12 日', badge: null, remind: '10:00 提醒', pausedToday: false },
-          { title: '学习吉他', desc: '练习《晴天》前奏指法', done: true, deadline: '已完成', badge: null, remind: null, pausedToday: false }
+          { title: '晨跑 5 公里', desc: '配速控制在 6 分钟以内', done: false, type: 'reminder', deadline: '每天 07:00', badge: null, remind: '06:30 提醒', pausedToday: false },
+          { title: '阅读《深度学习》', desc: '完成第三章并做笔记', done: false, type: 'todo', deadline: '周日', badge: null, remind: null, pausedToday: false },
+          { title: '预约牙医', desc: '半年一次的洗牙检查', done: false, type: 'reminder', deadline: '4 月 15 日', badge: 'amber', remind: '前一天 18:00 提醒', pausedToday: false },
+          { title: '整理相册', desc: '备份手机照片到 NAS', done: true, type: 'todo', deadline: '已完成', badge: null, remind: null, pausedToday: false },
+          { title: '买生日礼物', desc: '给妈妈的生日礼物挑选', done: false, type: 'reminder', deadline: '4 月 12 日', badge: null, remind: '10:00 提醒', pausedToday: false },
+          { title: '学习吉他', desc: '练习《晴天》前奏指法', done: true, type: 'todo', deadline: '已完成', badge: null, remind: null, pausedToday: false }
         ]
       }
     };
@@ -462,7 +566,7 @@
         if (task.done) {
           return `<div class="px-3 py-1.5 rounded-lg bg-emerald-100 text-emerald-700 text-xs font-medium">已完成</div>`;
         }
-        if (task.remind) {
+        if (task.type === 'reminder') {
           if (task.pausedToday) {
             return `<button onclick="togglePause('${wsName}','${titleEsc}')" class="px-3 py-1.5 rounded-lg bg-amber-500 text-white text-xs font-medium cursor-pointer transition" title="恢复提醒">已暂停</button>`;
           }
@@ -499,7 +603,7 @@
         } else {
           badges += `<span class="flex items-center gap-1 text-gray-500"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>截止：${task.deadline}</span>`;
         }
-        if (task.remind) {
+        if (task.type === 'reminder' && task.remind) {
           if (task.remind.includes('每周')) {
             badges += `<span class="flex items-center gap-1 text-emerald-600 font-medium bg-emerald-50 px-2 py-0.5 rounded"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>${task.remind}</span>`;
           } else {
@@ -606,6 +710,34 @@
       el.classList.remove('flex');
     }
 
+    function toggleNewTaskType() {
+      const type = document.getElementById('new-task-type').value;
+      document.getElementById('new-todo-fields').classList.toggle('hidden', type !== 'todo');
+      document.getElementById('new-reminder-fields').classList.toggle('hidden', type !== 'reminder');
+      if (type === 'reminder') toggleNewRecurringPattern();
+    }
+
+    function toggleEditTaskType() {
+      const type = document.getElementById('edit-task-type').value;
+      document.getElementById('edit-todo-fields').classList.toggle('hidden', type !== 'todo');
+      document.getElementById('edit-reminder-fields').classList.toggle('hidden', type !== 'reminder');
+      if (type === 'reminder') toggleEditRecurringPattern();
+    }
+
+    function toggleNewRecurringPattern() {
+      const val = document.getElementById('new-recurring-pattern').value;
+      document.getElementById('new-weekly-days').classList.toggle('hidden', val !== 'weekly');
+      document.getElementById('new-monthly-day').classList.toggle('hidden', val !== 'monthly');
+    }
+
+    function toggleEditRecurringPattern() {
+      const val = document.getElementById('edit-recurring-pattern').value;
+      document.getElementById('edit-weekly-days').classList.toggle('hidden', val !== 'weekly');
+      document.getElementById('edit-monthly-day').classList.toggle('hidden', val !== 'monthly');
+    }
+
+    toggleNewTaskType();
+    toggleEditTaskType();
     renderWorkspace('工作');
   </script>
 </body>
