@@ -204,8 +204,8 @@ function AppContent() {
 function App() {
   return (
     <WorkspaceProvider>
-      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', backgroundColor: 'var(--color-gray-100)' }}>
-        <div style={{ width: '1100px', height: '720px' }}>
+      <div style={{ width: '100%', height: '100%', display: 'flex', backgroundColor: 'var(--color-gray-100)' }}>
+        <div style={{ width: '100%', height: '100%' }}>
           <AppContent />
         </div>
       </div>
