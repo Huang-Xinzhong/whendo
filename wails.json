@@ -1,0 +1,21 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "whendo",
+  "outputfilename": "whendo",
+  "frontend": {
+    "dir": "./frontend",
+    "install": "npm install",
+    "build": "npm run build",
+    "dev:watcher": "npm run dev",
+    "dev:serverUrl": "VITE_HMR_HOST=localhost:34115"
+  },
+  "wailsjsdir": "./frontend/src",
+  "assetdir": "./frontend/dist",
+  "info": {
+    "companyName": "Shiliang",
+    "productName": "WhenDo",
+    "productVersion": "0.1.0",
+    "copyright": "Copyright © 2026",
+    "comments": "WhenDo - Task and reminder desktop app"
+  }
+}
