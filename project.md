@@ -28,8 +28,8 @@
 
 #### 任务管理模块
 - [ ] 添加任务（标题、描述、任务类型）
-  - **任务类型**：分为「代办」与「定时提醒」
-    - **代办**：需填写截止时间，可额外设置单次提醒时间
+  - **任务类型**：分为「待办」与「定时提醒」
+    - **待办**：需填写截止时间，可额外设置单次提醒时间
     - **定时提醒**：需设置提醒时间范围（开始时间、结束时间）、提醒周期（每 15/30/60/120 分钟）以及重复模式：
       - **每天**
       - **每个工作日**
@@ -125,9 +125,9 @@
 | `workspace_id` | INTEGER NOT NULL | 所属工作区 ID（外键） |
 | `title` | TEXT NOT NULL | 任务标题 |
 | `description` | TEXT | 任务描述 |
-| `type` | TEXT DEFAULT 'todo' | 任务类型：`todo` 代办 / `reminder` 定时提醒 |
-| `due_at` | DATETIME | 代办任务的截止时间（可选） |
-| `remind_at` | DATETIME | 代办任务的提醒时间（可选） |
+| `type` | TEXT DEFAULT 'todo' | 任务类型：`todo` 待办 / `reminder` 定时提醒 |
+| `due_at` | DATETIME | 待办任务的截止时间（可选） |
+| `remind_at` | DATETIME | 待办任务的提醒时间（可选） |
 | `is_completed` | BOOLEAN DEFAULT 0 | 是否已完成 |
 | `created_at` | DATETIME DEFAULT CURRENT_TIMESTAMP | 创建时间 |
 | `updated_at` | DATETIME DEFAULT CURRENT_TIMESTAMP | 更新时间 |

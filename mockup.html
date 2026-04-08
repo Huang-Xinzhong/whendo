@@ -184,13 +184,13 @@
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">任务类型</label>
             <select id="new-task-type" onchange="toggleNewTaskType()" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
-              <option value="todo">代办</option>
+              <option value="todo">待办</option>
               <option value="reminder">定时提醒</option>
             </select>
           </div>
         </div>
         <div class="border-t border-gray-200 pt-5">
-          <!-- 代办：截止时间 + 提醒时间 -->
+          <!-- 待办：截止时间 + 提醒时间 -->
           <div id="new-todo-fields" class="space-y-4">
             <div class="grid grid-cols-2 gap-4">
               <div>
@@ -299,13 +299,13 @@
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">任务类型</label>
             <select id="edit-task-type" onchange="toggleEditTaskType()" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
-              <option value="todo">代办</option>
+              <option value="todo">待办</option>
               <option value="reminder" selected>定时提醒</option>
             </select>
           </div>
         </div>
         <div class="border-t border-gray-200 pt-5">
-          <!-- 代办：截止时间 + 提醒时间 -->
+          <!-- 待办：截止时间 + 提醒时间 -->
           <div id="edit-todo-fields" class="hidden space-y-4">
             <div class="grid grid-cols-2 gap-4">
               <div>
@@ -416,11 +416,7 @@
     </aside>
     <main class="flex-1 flex flex-col bg-white">
       <header class="h-16 border-b border-gray-200 flex items-center px-8 bg-white">
-        <button onclick="showPage('main')" class="text-gray-500 hover:text-gray-900 flex items-center gap-1 text-sm">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-          返回
-        </button>
-        <h1 class="ml-4 text-xl font-bold text-gray-900">设置</h1>
+        <h1 class="text-xl font-bold text-gray-900">设置</h1>
       </header>
       <div class="flex-1 overflow-y-auto p-8">
         <div class="max-w-2xl space-y-8">
@@ -485,16 +481,16 @@
     </main>
   </section>
 
-  <!-- ===== 5. 提醒弹窗 (全局覆盖层) ===== -->
-  <section id="reminder" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-sm">
+  <!-- ===== 5. 待办提示窗口 (全局覆盖层) ===== -->
+  <section id="todo-reminder" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-sm">
     <div class="bg-white rounded-2xl shadow-2xl w-[420px] p-6 border border-gray-200">
       <div class="flex items-start gap-4">
         <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center shrink-0">
           <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
         </div>
         <div class="flex-1">
-          <h2 class="text-lg font-bold text-gray-900">任务提醒</h2>
-          <p class="text-sm text-gray-500 mt-1">您有一个即将到期的任务需要处理</p>
+          <h2 class="text-lg font-bold text-gray-900">待办提醒</h2>
+          <p class="text-sm text-gray-500 mt-1">您有一个待办任务需要处理</p>
           <div class="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
             <div class="font-semibold text-gray-900">回复客户邮件</div>
             <div class="text-xs text-gray-500 mt-1">关于下周合作方案的沟通</div>
@@ -503,11 +499,31 @@
               截止：今天 15:00
             </div>
           </div>
-          <div class="mt-5 flex items-center gap-3 justify-end">
-            <button onclick="showPage('main')" class="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition">稍后提醒 (10分钟)</button>
-            <button onclick="showPage('main')" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition">知道了</button>
+          <div class="mt-5 flex flex-wrap items-center gap-2 justify-end">
+            <button onclick="closeTodoReminder()" class="px-3 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition">完成</button>
+            <button onclick="snoozeTodoReminder()" class="px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition">稍后提醒 (10分钟)</button>
+            <button onclick="dismissTodoReminder()" class="px-3 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition">知道了</button>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 6. 定时提醒提示窗口 (全局覆盖层) ===== -->
+  <section id="timer-reminder" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 border border-gray-200 text-center" style="width: 480px;">
+      <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto">
+        <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      </div>
+      <h2 class="text-lg font-bold text-gray-900 mt-4">定时提醒</h2>
+      <p class="text-sm text-gray-500 mt-1">喝水提醒</p>
+      <p class="text-xs text-gray-400 mt-1">每半个小时喝一次水，保持身体水分</p>
+      <div class="mt-5">
+        <div class="text-4xl font-mono font-bold text-amber-600" id="timer-countdown">60</div>
+        <div class="text-xs text-gray-400 mt-1">秒后自动关闭</div>
+      </div>
+      <div class="mt-5">
+        <button onclick="dismissTimerReminder()" class="px-5 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-lg transition">知道了</button>
       </div>
     </div>
   </section>
@@ -518,7 +534,8 @@
     <button onclick="openModal('new-task-modal')" class="px-3 py-1.5 text-sm font-medium rounded-full hover:bg-gray-100 transition">新建</button>
     <button onclick="openModal('edit-task-modal')" class="px-3 py-1.5 text-sm font-medium rounded-full hover:bg-gray-100 transition">编辑</button>
     <button onclick="showPage('settings')" class="px-3 py-1.5 text-sm font-medium rounded-full hover:bg-gray-100 transition">设置</button>
-    <button onclick="showPage('reminder')" class="px-3 py-1.5 text-sm font-medium rounded-full hover:bg-gray-100 transition">提醒弹窗</button>
+    <button onclick="showPage('todo-reminder')" class="px-3 py-1.5 text-sm font-medium rounded-full hover:bg-gray-100 transition">待办弹窗</button>
+    <button onclick="showPage('timer-reminder')" class="px-3 py-1.5 text-sm font-medium rounded-full hover:bg-gray-100 transition">定时弹窗</button>
   </div>
 
   <script>
@@ -680,22 +697,67 @@
       }
     }
 
+    let timerInterval = null;
+    let timerSeconds = 60;
+
     function showPage(id) {
       document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.fixed.z-50').forEach(el => {
         el.classList.add('hidden');
         el.classList.remove('flex');
       });
-      const reminder = document.getElementById('reminder');
-      if (id === 'reminder') {
-        reminder.classList.remove('hidden');
-        reminder.classList.add('flex');
+      clearInterval(timerInterval);
+
+      const todoReminder = document.getElementById('todo-reminder');
+      const timerReminder = document.getElementById('timer-reminder');
+
+      if (id === 'todo-reminder') {
+        todoReminder.classList.remove('hidden');
+        todoReminder.classList.add('flex');
         document.getElementById('main').classList.add('active');
+      } else if (id === 'timer-reminder') {
+        timerReminder.classList.remove('hidden');
+        timerReminder.classList.add('flex');
+        document.getElementById('main').classList.add('active');
+        timerSeconds = 60;
+        document.getElementById('timer-countdown').textContent = timerSeconds;
+        timerInterval = setInterval(() => {
+          timerSeconds--;
+          document.getElementById('timer-countdown').textContent = timerSeconds;
+          if (timerSeconds <= 0) {
+            clearInterval(timerInterval);
+            timerReminder.classList.add('hidden');
+            timerReminder.classList.remove('flex');
+          }
+        }, 1000);
       } else {
-        reminder.classList.add('hidden');
-        reminder.classList.remove('flex');
+        todoReminder.classList.add('hidden');
+        todoReminder.classList.remove('flex');
+        timerReminder.classList.add('hidden');
+        timerReminder.classList.remove('flex');
         document.getElementById(id).classList.add('active');
       }
+    }
+
+    function closeTodoReminder() {
+      const el = document.getElementById('todo-reminder');
+      el.classList.add('hidden');
+      el.classList.remove('flex');
+    }
+
+    function snoozeTodoReminder() {
+      closeTodoReminder();
+    }
+
+    function dismissTodoReminder() {
+      closeTodoReminder();
+    }
+
+    function dismissTimerReminder() {
+      clearInterval(timerInterval);
+      const el = document.getElementById('timer-reminder');
+      el.classList.add('hidden');
+      el.classList.remove('flex');
     }
 
     function openModal(id) {
