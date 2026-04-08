@@ -19,7 +19,7 @@
   width: 2rem;
   height: 2rem;
   background-color: var(--color-primary);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -87,8 +87,8 @@ export function TaskCard({
       <div className={styles.content}>
         {isDone ? (
           <>
-            <h3 className={[styles.title, styles.titleDone].join(' ')}>{task.title}</h3>
-            {task.description && <p className={[styles.desc, styles.descDone].join(' ')}>{task.description}</p>}
+            <h3 className={styles.title}>{task.title}</h3>
+            {task.description && <p className={styles.desc}>{task.description}</p>}
             <div className={styles.badges}>
               <span className={[styles.badge, styles.badgeGray].join(' ')}>
                 <Icon name="clock" size={14} />
@@ -122,7 +122,6 @@ export function TaskCard({
 }
 
 function formatDeadline(task) {
-  if (task.is_completed) return '已完成'
   if (task.type === 'reminder') {
     if (!task.start_time && !task.end_time) return '全天'
     if (task.start_time && task.end_time) return `${task.start_time} ~ ${task.end_time}`
