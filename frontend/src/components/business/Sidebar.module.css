@@ -1,0 +1,109 @@
+.sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--color-gray-50);
+  border-right: 1px solid var(--color-gray-200);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.logoIcon {
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoSvg {
+  color: var(--color-white);
+}
+
+.logoText {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--color-gray-900);
+}
+
+.nav {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.navTitle {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+  padding-left: 0.5rem;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.addBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  background: transparent;
+  color: var(--color-gray-500);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.addBtn:hover {
+  color: var(--color-gray-900);
+}
+
+.footer {
+  padding: 1rem;
+  border-top: 1px solid var(--color-gray-200);
+}
+
+.settingsBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  background: transparent;
+  color: var(--color-gray-600);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.settingsBtn:hover {
+  background-color: var(--color-gray-100);
+}
+
+.settingsActive {
+  background-color: var(--color-white);
+  border-color: var(--color-gray-200);
+  box-shadow: var(--shadow-sm);
+  color: var(--color-gray-900);
+}

@@ -1,0 +1,60 @@
+.item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  background: transparent;
+  color: var(--color-gray-600);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.item:hover {
+  background-color: var(--color-gray-100);
+}
+
+.active {
+  background-color: var(--color-white);
+  border-color: var(--color-gray-200);
+  box-shadow: var(--shadow-sm);
+  color: var(--color-gray-900);
+}
+
+.dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-gray-400);
+  flex-shrink: 0;
+}
+
+.colorBlue .dot {
+  background-color: var(--color-blue);
+}
+
+.colorGreen .dot {
+  background-color: var(--color-green);
+}
+
+.colorPurple .dot {
+  background-color: var(--color-purple);
+}
+
+.name {
+  flex: 1;
+  text-align: left;
+}
+
+.count {
+  margin-left: auto;
+  font-size: var(--text-xs);
+  color: var(--color-gray-400);
+  background-color: var(--color-gray-100);
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--radius-full);
+}
