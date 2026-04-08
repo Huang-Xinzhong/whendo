@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "wails": {
+      "source": "codegirl-007/aiplatform",
+      "sourceType": "github",
+      "computedHash": "bf6f69682da4c8c7ac3a30da2efcf7ce4438bf9d5d312dfbb80855c0ce51b98a"
+    }
+  }
+}
