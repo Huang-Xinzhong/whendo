@@ -71,6 +71,11 @@ func migrate(db *sql.DB) error {
 		`CREATE INDEX IF NOT EXISTS idx_tasks_workspace_id ON tasks(workspace_id);`,
 		`CREATE INDEX IF NOT EXISTS idx_tasks_is_completed ON tasks(is_completed);`,
 		`CREATE INDEX IF NOT EXISTS idx_tasks_next_trigger_at ON tasks(next_trigger_at);`,
+		`CREATE TABLE IF NOT EXISTS settings (
+			key TEXT PRIMARY KEY,
+			value TEXT NOT NULL
+		);`,
+		`INSERT OR IGNORE INTO settings (key, value) VALUES ('default_workspace_id', '1'), ('default_sort', 'created_at_desc');`,
 		`INSERT OR IGNORE INTO workspaces (id, name) VALUES (1, '家庭'), (2, '工作'), (3, '个人');`,
 	}
 

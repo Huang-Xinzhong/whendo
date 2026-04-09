@@ -57,4 +57,7 @@ type Task struct {
 	PausedDate     *time.Time   `json:"paused_date,omitempty"`
 	CreatedAt      time.Time    `json:"created_at"`
 	UpdatedAt      time.Time    `json:"updated_at"`
+	// Runtime enriched fields (not stored in DB).
+	RemindText  string `json:"remindText,omitempty"`
+	PausedToday bool   `json:"pausedToday,omitempty"`
 }
