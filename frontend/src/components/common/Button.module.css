@@ -6,8 +6,12 @@
   border: 1px solid transparent;
   border-radius: var(--radius-lg);
   font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  min-width: max-content;
+  flex-shrink: 0;
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .button:disabled {
@@ -47,11 +51,14 @@
   background-color: var(--color-primary);
   color: var(--color-white);
   border-color: var(--color-primary);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
 }
 
 .primary:hover:not(:disabled) {
   background-color: var(--color-primary-hover);
   border-color: var(--color-primary-hover);
+  box-shadow: none;
 }
 
 .secondary {

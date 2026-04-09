@@ -64,16 +64,14 @@
   width: 100%;
   margin-top: 1rem;
   padding: 0.5rem 0.75rem;
-  border: none;
-  background: transparent;
-  color: var(--color-gray-500);
-  font-size: var(--text-sm);
-  cursor: pointer;
-  transition: color 0.15s ease;
+  justify-content: flex-start;
 }
 
-.addBtn:hover {
-  color: var(--color-gray-900);
+.addBtn[class] {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  color: var(--color-gray-500);
 }
 
 .footer {

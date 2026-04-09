@@ -2,6 +2,7 @@ import React from 'react'
 import styles from './Sidebar.module.css'
 import { WorkspaceItem } from './WorkspaceItem'
 import { Icon } from '../common/Icons'
+import { Button } from '../common/Button'
 
 export function Sidebar({
   workspaces,
@@ -34,10 +35,9 @@ export function Sidebar({
             />
           ))}
         </div>
-        <button type="button" className={styles.addBtn} onClick={onAddWorkspace}>
-          <Icon name="plus" size={16} />
+        <Button variant="ghost" size="sm" className={styles.addBtn} onClick={onAddWorkspace} iconLeft={<Icon name="plus" size={16} />}>
           新建工作区
-        </button>
+        </Button>
       </nav>
 
       <div className={styles.footer}>

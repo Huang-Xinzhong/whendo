@@ -83,7 +83,7 @@ export function WorkspacePage({
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
           </Select>
-          <Button variant="primary" onClick={onNewTask} iconLeft={<Icon name="plus" size={16} />}>
+          <Button variant="primary" size="md" onClick={onNewTask} className={styles.newTaskBtn} iconLeft={<Icon name="plus" size={16} />}>
             新建任务
           </Button>
         </div>
@@ -108,7 +108,12 @@ export function WorkspacePage({
 
       <div className={styles.list}>
         {sortedTasks.length === 0 ? (
-          <div className={styles.empty}>暂无任务，点击右上角新建任务</div>
+          <div className={styles.empty}>
+            <p className={styles.emptyText}>暂无任务</p>
+            <Button variant="primary" size="md" onClick={onNewTask} iconLeft={<Icon name="plus" size={16} />}>
+              新建任务
+            </Button>
+          </div>
         ) : (
           sortedTasks.map((task) => (
             <TaskCard
