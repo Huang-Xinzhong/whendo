@@ -10,23 +10,55 @@ import (
 	"whendo/internal/requests"
 )
 
+var workspaceColors = []string{"blue", "green", "purple"}
+
 // WorkspaceService provides workspace business logic.
 type WorkspaceService struct {
+	db    *sql.DB
 	store *database.WorkspaceStore
 }
 
 // NewWorkspaceService creates a new WorkspaceService.
 func NewWorkspaceService(db *sql.DB) *WorkspaceService {
-	return &WorkspaceService{store: database.NewWorkspaceStore(db)}
+	return &WorkspaceService{db: db, store: database.NewWorkspaceStore(db)}
 }
 
-// List returns all workspaces.
+// List returns all workspaces enriched with color and task count.
 func (s *WorkspaceService) List() ([]models.Workspace, error) {
 	list, err := s.store.List()
 	if err != nil {
 		return nil, fmt.Errorf("list workspaces: %w", err)
 	}
+
+	counts, err := s.taskCounts()
+	if err != nil {
+		return nil, fmt.Errorf("task counts: %w", err)
+	}
+
+	for i := range list {
+		list[i].Color = workspaceColors[i%len(workspaceColors)]
+		list[i].TaskCount = counts[list[i].ID]
+	}
 	return list, nil
+}
+
+func (s *WorkspaceService) taskCounts() (map[int64]int, error) {
+	rows, err := s.db.Query(`SELECT workspace_id, COUNT(*) FROM tasks GROUP BY workspace_id`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	m := make(map[int64]int)
+	for rows.Next() {
+		var wsID int64
+		var c int
+		if err := rows.Scan(&wsID, &c); err != nil {
+			return nil, err
+		}
+		m[wsID] = c
+	}
+	return m, rows.Err()
 }
 
 // Create validates and creates a workspace.

@@ -15,7 +15,7 @@ export function useTasks(workspaceId, filter = 'all') {
     try {
       setLoading(true)
       const list = await api.TaskList(workspaceId, filter)
-      setTasks(list)
+      setTasks(list || [])
       setError(null)
     } catch (err) {
       setError(err)

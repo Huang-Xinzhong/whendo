@@ -7,7 +7,7 @@
     "install": "npm install",
     "build": "npm run build",
     "dev:watcher": "npm run dev",
-    "dev:serverUrl": "VITE_HMR_HOST=localhost:34115"
+    "dev:serverUrl": "http://localhost:5173"
   },
   "wailsjsdir": "./frontend/src",
   "assetdir": "./frontend/dist",

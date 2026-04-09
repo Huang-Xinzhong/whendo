@@ -10,7 +10,7 @@ export function useWorkspaces() {
     try {
       setLoading(true)
       const list = await api.WorkspaceList()
-      setWorkspaces(list)
+      setWorkspaces(list || [])
       setError(null)
     } catch (err) {
       setError(err)

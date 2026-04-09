@@ -32,15 +32,17 @@ export function WorkspacePage({
   const [editingName, setEditingName] = useState(false)
   const [nameValue, setNameValue] = useState(workspace?.name || '')
 
+  const safeTasks = tasks || []
+
   const stats = useMemo(() => {
-    const all = tasks.length
-    const done = tasks.filter((t) => t.is_completed).length
+    const all = safeTasks.length
+    const done = safeTasks.filter((t) => t.is_completed).length
     const undone = all - done
     return { all, done, undone }
-  }, [tasks])
+  }, [safeTasks])
 
   const sortedTasks = useMemo(() => {
-    const list = [...tasks]
+    const list = [...safeTasks]
     if (sort === 'due_at_desc') {
       list.sort((a, b) => {
         const da = a.due_at ? new Date(a.due_at) : new Date(0)
@@ -51,7 +53,7 @@ export function WorkspacePage({
       list.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
     }
     return list
-  }, [tasks, sort])
+  }, [safeTasks, sort])
 
   const pendingTodayText = `${stats.undone} 个待办任务`
 

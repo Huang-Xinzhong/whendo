@@ -34,16 +34,16 @@ function AppContent() {
   const { todoReminder, timerReminder, dismissTodoReminder, dismissTimerReminder } = useReminders()
 
   useEffect(() => {
-    if (workspaces.length > 0 && !activeWorkspaceId) {
+    if (workspaces?.length > 0 && !activeWorkspaceId) {
       api.SettingsGet().then((s) => {
-        const defaultId = Number(s.default_workspace_id)
+        const defaultId = Number(s?.default_workspace_id)
         const found = workspaces.find((w) => w.id === defaultId)
         setActiveWorkspaceId(found ? found.id : workspaces[0].id)
       })
     }
   }, [workspaces, activeWorkspaceId])
 
-  const activeWorkspace = useMemo(() => workspaces.find((w) => w.id === activeWorkspaceId), [workspaces, activeWorkspaceId])
+  const activeWorkspace = useMemo(() => workspaces?.find((w) => w.id === activeWorkspaceId), [workspaces, activeWorkspaceId])
 
   const handleSelectWorkspace = (id) => {
     setActiveWorkspaceId(id)
@@ -184,7 +184,12 @@ function AppContent() {
         isOpen={!!todoReminder}
         onClose={dismissTodoReminder}
         task={todoReminder}
-        onComplete={() => {
+        onComplete={async () => {
+          if (todoReminder) {
+            await toggleComplete(todoReminder.id)
+            await refreshTasks()
+            await refreshWorkspaces()
+          }
           dismissTodoReminder()
         }}
         onSnooze={() => {

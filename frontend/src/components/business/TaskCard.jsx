@@ -87,8 +87,8 @@ export function TaskCard({
       <div className={styles.content}>
         {isDone ? (
           <>
-            <h3 className={styles.title}>{task.title}</h3>
-            {task.description && <p className={styles.desc}>{task.description}</p>}
+            <h3 className={[styles.title, styles.titleDone].join(' ')}>{task.title}</h3>
+            {task.description && <p className={[styles.desc, styles.descDone].join(' ')}>{task.description}</p>}
             <div className={styles.badges}>
               <span className={[styles.badge, styles.badgeGray].join(' ')}>
                 <Icon name="clock" size={14} />

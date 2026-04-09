@@ -1,27 +1,36 @@
 import { useState, useEffect } from 'react'
+import { EventsOn, EventsOff } from '../wailsjs/runtime/runtime.js'
 
 export function useReminders() {
   const [todoReminder, setTodoReminder] = useState(null)
   const [timerReminder, setTimerReminder] = useState(null)
 
-  // Simulated event listeners for demo purposes
   useEffect(() => {
-    // In real app, this would use EventsOn("reminder:triggered", ...)
-    return () => {}
+    if (typeof window === 'undefined' || !window.runtime) {
+      return
+    }
+    const handler = (task) => {
+      if (!task) return
+      if (task.type === 'todo') {
+        setTodoReminder(task)
+      } else if (task.type === 'reminder') {
+        setTimerReminder(task)
+      }
+    }
+
+    EventsOn('reminder:triggered', handler)
+    return () => {
+      EventsOff('reminder:triggered')
+    }
   }, [])
 
-  const showTodoReminder = (task) => setTodoReminder(task)
   const dismissTodoReminder = () => setTodoReminder(null)
-
-  const showTimerReminder = (task) => setTimerReminder(task)
   const dismissTimerReminder = () => setTimerReminder(null)
 
   return {
     todoReminder,
     timerReminder,
-    showTodoReminder,
     dismissTodoReminder,
-    showTimerReminder,
     dismissTimerReminder,
   }
 }

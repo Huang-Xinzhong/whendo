@@ -54,6 +54,6 @@ type TaskUpdateReq struct {
 
 // SettingsUpdateReq is the request for updating settings.
 type SettingsUpdateReq struct {
-	DefaultWorkspaceID int64  `json:"default_workspace_id,omitempty"`
+	DefaultWorkspaceID string `json:"default_workspace_id,omitempty"`
 	DefaultSort        string `json:"default_sort,omitempty"`
 }

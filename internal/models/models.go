@@ -34,6 +34,9 @@ type Workspace struct {
 	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+	// Runtime enriched fields (not stored in DB).
+	Color     string `json:"color,omitempty"`
+	TaskCount int    `json:"taskCount,omitempty"`
 }
 
 // Task represents a todo item or reminder.

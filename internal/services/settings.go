@@ -32,8 +32,12 @@ func (s *SettingsService) Get() (map[string]string, error) {
 
 // Update updates settings.
 func (s *SettingsService) Update(req requests.SettingsUpdateReq) error {
-	if req.DefaultWorkspaceID != 0 {
-		if err := s.store.SetInt("default_workspace_id", req.DefaultWorkspaceID); err != nil {
+	if req.DefaultWorkspaceID != "" {
+		id, err := strconv.ParseInt(req.DefaultWorkspaceID, 10, 64)
+		if err != nil {
+			return fmt.Errorf("invalid default_workspace_id: %w", err)
+		}
+		if err := s.store.SetInt("default_workspace_id", id); err != nil {
 			return fmt.Errorf("update default_workspace_id: %w", err)
 		}
 	}

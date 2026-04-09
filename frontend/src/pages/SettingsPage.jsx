@@ -86,7 +86,7 @@ export function SettingsPage({ workspaces }) {
                 className={styles.settingSelect}
                 disabled={loading}
               >
-                {workspaces.map((ws) => (
+                {(workspaces || []).map((ws) => (
                   <option key={ws.id} value={ws.id}>{ws.name}</option>
                 ))}
               </Select>
