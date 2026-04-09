@@ -29,7 +29,7 @@ func NewApp(db *sql.DB) *App {
 // so we can interact with the Wails runtime later.
 func (a *App) Startup(ctx context.Context) {
 	a.ctx = ctx
-	runtime.MenuSetApplicationMenu(ctx, NewMenu(ctx))
+	runtime.MenuSetApplicationMenu(ctx, nil)
 	a.scheduler.Start(ctx)
 }
 
