@@ -12,18 +12,18 @@ import (
 
 var workspaceColors = []string{"blue", "green", "purple"}
 
-// WorkspaceService provides workspace business logic.
+// WorkspaceService 提供工作区的业务逻辑。
 type WorkspaceService struct {
 	db    *sql.DB
 	store *database.WorkspaceStore
 }
 
-// NewWorkspaceService creates a new WorkspaceService.
+// NewWorkspaceService 创建一个新的 WorkspaceService 实例。
 func NewWorkspaceService(db *sql.DB) *WorkspaceService {
 	return &WorkspaceService{db: db, store: database.NewWorkspaceStore(db)}
 }
 
-// List returns all workspaces enriched with color and task count.
+// List 返回所有工作区，并补充颜色和任务数量。
 func (s *WorkspaceService) List() ([]models.Workspace, error) {
 	list, err := s.store.List()
 	if err != nil {
@@ -61,7 +61,7 @@ func (s *WorkspaceService) taskCounts() (map[int64]int, error) {
 	return m, rows.Err()
 }
 
-// Create validates and creates a workspace.
+// Create 校验并创建工作区。
 func (s *WorkspaceService) Create(req requests.WorkspaceCreateReq) (*models.Workspace, error) {
 	name := strings.TrimSpace(req.Name)
 	if name == "" || len(name) > 50 {
@@ -74,7 +74,7 @@ func (s *WorkspaceService) Create(req requests.WorkspaceCreateReq) (*models.Work
 	return ws, nil
 }
 
-// Update validates and renames a workspace.
+// Update 校验并重命名工作区。
 func (s *WorkspaceService) Update(req requests.WorkspaceUpdateReq) (*models.Workspace, error) {
 	name := strings.TrimSpace(req.Name)
 	if name == "" || len(name) > 50 {
@@ -87,7 +87,7 @@ func (s *WorkspaceService) Update(req requests.WorkspaceUpdateReq) (*models.Work
 	return ws, nil
 }
 
-// Delete removes a workspace.
+// Delete 删除工作区。
 func (s *WorkspaceService) Delete(id int64) error {
 	if err := s.store.Delete(id); err != nil {
 		return fmt.Errorf("delete workspace: %w", err)

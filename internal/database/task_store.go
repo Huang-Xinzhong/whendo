@@ -8,12 +8,17 @@ import (
 	"whendo/internal/models"
 )
 
-// TaskStore provides task storage operations.
+// [DEBUG] 格式化调试输出的辅助函数。
+func debugLog(format string, args ...interface{}) {
+	fmt.Printf("[DEBUG] "+format+"\n", args...)
+}
+
+// TaskStore 提供任务相关的存储操作。
 type TaskStore struct {
 	db *sql.DB
 }
 
-// NewTaskStore creates a new TaskStore.
+// NewTaskStore 创建一个新的 TaskStore 实例。
 func NewTaskStore(db *sql.DB) *TaskStore {
 	return &TaskStore{db: db}
 }
@@ -96,8 +101,9 @@ func scanTaskRow(row *sql.Row) (models.Task, error) {
 	return t, err
 }
 
-// List returns tasks for a workspace with optional filtering.
+// List 返回指定工作区下的任务列表，支持可选过滤。
 func (s *TaskStore) List(workspaceID int64, filter string) ([]models.Task, error) {
+	debugLog("TaskStore.List workspaceID=%d filter=%s", workspaceID, filter)
 	query := `SELECT id, workspace_id, title, description, type, due_at, remind_at, is_completed, start_time, end_time, interval_value, interval_unit, repeat_mode, weekdays, month_day, next_trigger_at, paused_date, created_at, updated_at FROM tasks WHERE workspace_id = ?`
 	args := []interface{}{workspaceID}
 
@@ -112,6 +118,7 @@ func (s *TaskStore) List(workspaceID int64, filter string) ([]models.Task, error
 
 	rows, err := s.db.Query(query, args...)
 	if err != nil {
+		debugLog("TaskStore.List query error: %v", err)
 		return nil, fmt.Errorf("query tasks: %w", err)
 	}
 	defer rows.Close()
@@ -120,28 +127,35 @@ func (s *TaskStore) List(workspaceID int64, filter string) ([]models.Task, error
 	for rows.Next() {
 		t, err := scanTask(rows)
 		if err != nil {
+			debugLog("TaskStore.List scan error: %v", err)
 			return nil, fmt.Errorf("scan task: %w", err)
 		}
 		list = append(list, t)
 	}
+	debugLog("TaskStore.List returned %d tasks", len(list))
 	return list, rows.Err()
 }
 
-// Get returns a single task by id.
+// Get 根据 ID 返回单个任务。
 func (s *TaskStore) Get(id int64) (*models.Task, error) {
+	debugLog("TaskStore.Get id=%d", id)
 	row := s.db.QueryRow(`SELECT id, workspace_id, title, description, type, due_at, remind_at, is_completed, start_time, end_time, interval_value, interval_unit, repeat_mode, weekdays, month_day, next_trigger_at, paused_date, created_at, updated_at FROM tasks WHERE id = ?`, id)
 	t, err := scanTaskRow(row)
 	if err != nil {
 		if err == sql.ErrNoRows {
+			debugLog("TaskStore.Get task %d not found", id)
 			return nil, fmt.Errorf("task %d not found", id)
 		}
+		debugLog("TaskStore.Get scan error: %v", err)
 		return nil, fmt.Errorf("scan task: %w", err)
 	}
+	debugLog("TaskStore.Get found task id=%d type=%s next_trigger_at=%v", t.ID, t.Type, t.NextTriggerAt)
 	return &t, nil
 }
 
-// Create inserts a new task.
+// Create 插入一条新任务。
 func (s *TaskStore) Create(t *models.Task) (*models.Task, error) {
+	debugLog("TaskStore.Create title=%s type=%s remind_at=%v next_trigger_at=%v", t.Title, t.Type, t.RemindAt, t.NextTriggerAt)
 	res, err := s.db.Exec(
 		`INSERT INTO tasks (workspace_id, title, description, type, due_at, remind_at, is_completed, start_time, end_time, interval_value, interval_unit, repeat_mode, weekdays, month_day, next_trigger_at, paused_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 		t.WorkspaceID, t.Title, t.Description, t.Type,
@@ -151,13 +165,15 @@ func (s *TaskStore) Create(t *models.Task) (*models.Task, error) {
 		t.NextTriggerAt, t.PausedDate,
 	)
 	if err != nil {
+		debugLog("TaskStore.Create insert error: %v", err)
 		return nil, fmt.Errorf("insert task: %w", err)
 	}
 	id, _ := res.LastInsertId()
+	debugLog("TaskStore.Created id=%d", id)
 	return s.Get(id)
 }
 
-// Update modifies an existing task.
+// Update 修改已有任务。
 func (s *TaskStore) Update(t *models.Task) (*models.Task, error) {
 	_, err := s.db.Exec(
 		`UPDATE tasks SET workspace_id = ?, title = ?, description = ?, type = ?, due_at = ?, remind_at = ?, is_completed = ?, start_time = ?, end_time = ?, interval_value = ?, interval_unit = ?, repeat_mode = ?, weekdays = ?, month_day = ?, next_trigger_at = ?, paused_date = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
@@ -174,7 +190,7 @@ func (s *TaskStore) Update(t *models.Task) (*models.Task, error) {
 	return s.Get(t.ID)
 }
 
-// Delete removes a task.
+// Delete 删除任务。
 func (s *TaskStore) Delete(id int64) error {
 	_, err := s.db.Exec(`DELETE FROM tasks WHERE id = ?`, id)
 	if err != nil {
@@ -183,7 +199,7 @@ func (s *TaskStore) Delete(id int64) error {
 	return nil
 }
 
-// ToggleCompleted flips the completion status.
+// ToggleCompleted 切换任务的完成状态。
 func (s *TaskStore) ToggleCompleted(id int64) (*models.Task, error) {
 	_, err := s.db.Exec(`UPDATE tasks SET is_completed = NOT is_completed, updated_at = CURRENT_TIMESTAMP WHERE id = ?`, id)
 	if err != nil {
@@ -192,7 +208,7 @@ func (s *TaskStore) ToggleCompleted(id int64) (*models.Task, error) {
 	return s.Get(id)
 }
 
-// TogglePause sets or clears paused_date to today.
+// TogglePause 将 paused_date 设为今天或清空。
 func (s *TaskStore) TogglePause(id int64) (*models.Task, error) {
 	t, err := s.Get(id)
 	if err != nil {
@@ -211,14 +227,41 @@ func (s *TaskStore) TogglePause(id int64) (*models.Task, error) {
 	return s.Get(id)
 }
 
-// ListPendingReminders returns active reminders that are not paused today and have next_trigger_at <= now.
+// ListPendingReminders 返回今天未暂停且 next_trigger_at <= now 的活跃提醒。
 func (s *TaskStore) ListPendingReminders(now time.Time) ([]models.Task, error) {
 	todayStr := now.Format("2006-01-02")
+	nowStr := now.Format("2006-01-02 15:04:05")
+	debugLog("TaskStore.ListPendingReminders now=%v nowStr=%s todayStr=%s", now, nowStr, todayStr)
 	rows, err := s.db.Query(
-		`SELECT id, workspace_id, title, description, type, due_at, remind_at, is_completed, start_time, end_time, interval_value, interval_unit, repeat_mode, weekdays, month_day, next_trigger_at, paused_date, created_at, updated_at FROM tasks WHERE type = 'reminder' AND (paused_date IS NULL OR paused_date != ?) AND next_trigger_at IS NOT NULL AND next_trigger_at <= ?`,
-		todayStr, now,
+		`SELECT
+			id,
+			workspace_id,
+			title,
+			description,
+			type,
+			due_at,
+			remind_at,
+			is_completed,
+			start_time,
+			end_time,
+			interval_value,
+			interval_unit,
+			repeat_mode,
+			weekdays,
+			month_day,
+			next_trigger_at,
+			paused_date,
+			created_at,
+			updated_at
+		FROM tasks
+		WHERE type IN ('reminder', 'todo')
+		  AND (paused_date IS NULL OR datetime(paused_date) != datetime(?))
+		  AND next_trigger_at IS NOT NULL
+		  AND datetime(next_trigger_at) <= datetime(?)`,
+		todayStr, nowStr,
 	)
 	if err != nil {
+		debugLog("TaskStore.ListPendingReminders query error: %v", err)
 		return nil, fmt.Errorf("query reminders: %w", err)
 	}
 	defer rows.Close()
@@ -227,14 +270,16 @@ func (s *TaskStore) ListPendingReminders(now time.Time) ([]models.Task, error) {
 	for rows.Next() {
 		t, err := scanTask(rows)
 		if err != nil {
+			debugLog("TaskStore.ListPendingReminders scan error: %v", err)
 			return nil, fmt.Errorf("scan reminder: %w", err)
 		}
 		list = append(list, t)
 	}
+	debugLog("TaskStore.ListPendingReminders returned %d tasks", len(list))
 	return list, rows.Err()
 }
 
-// ClearCompleted removes all completed tasks.
+// ClearCompleted 删除所有已完成的任务。
 func (s *TaskStore) ClearCompleted() error {
 	_, err := s.db.Exec(`DELETE FROM tasks WHERE is_completed = 1`)
 	if err != nil {

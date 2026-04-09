@@ -6,12 +6,12 @@ import (
 	"strconv"
 )
 
-// SettingsStore provides key-value settings operations.
+// SettingsStore 提供键值对设置的存储操作。
 type SettingsStore struct {
 	db *sql.DB
 }
 
-// NewSettingsStore creates a new SettingsStore.
+// NewSettingsStore 创建一个新的 SettingsStore 实例。
 func NewSettingsStore(db *sql.DB) *SettingsStore {
 	return &SettingsStore{db: db}
 }
@@ -41,7 +41,7 @@ func (s *SettingsStore) initDefaults() error {
 	return nil
 }
 
-// Open ensures the table exists and seeds defaults.
+// Open 确保表存在并初始化默认值。
 func (s *SettingsStore) Open() error {
 	if err := s.ensureTable(); err != nil {
 		return err
@@ -49,7 +49,7 @@ func (s *SettingsStore) Open() error {
 	return s.initDefaults()
 }
 
-// All returns all settings as a map.
+// All 以 map 形式返回所有设置。
 func (s *SettingsStore) All() (map[string]string, error) {
 	rows, err := s.db.Query(`SELECT key, value FROM settings`)
 	if err != nil {
@@ -68,7 +68,7 @@ func (s *SettingsStore) All() (map[string]string, error) {
 	return m, rows.Err()
 }
 
-// Set updates a setting value.
+// Set 更新设置值。
 func (s *SettingsStore) Set(key, value string) error {
 	_, err := s.db.Exec(`INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value`, key, value)
 	if err != nil {
@@ -77,7 +77,7 @@ func (s *SettingsStore) Set(key, value string) error {
 	return nil
 }
 
-// SetInt updates an integer setting value.
+// SetInt 以整数形式更新设置值。
 func (s *SettingsStore) SetInt(key string, value int64) error {
 	return s.Set(key, strconv.FormatInt(value, 10))
 }

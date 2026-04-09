@@ -11,29 +11,32 @@ import (
 	"whendo/internal/requests"
 )
 
-// TaskService provides task business logic.
+// TaskService 提供任务相关的业务逻辑。
 type TaskService struct {
 	store *database.TaskStore
 }
 
-// NewTaskService creates a new TaskService.
+// NewTaskService 创建一个新的 TaskService 实例。
 func NewTaskService(db *sql.DB) *TaskService {
 	return &TaskService{store: database.NewTaskStore(db)}
 }
 
-// List returns tasks for a workspace.
+// List 返回指定工作区下的任务列表。
 func (s *TaskService) List(workspaceID int64, filter string) ([]models.Task, error) {
+	fmt.Printf("[DEBUG] TaskService.List workspaceID=%d filter=%s\n", workspaceID, filter)
 	list, err := s.store.List(workspaceID, filter)
 	if err != nil {
+		fmt.Printf("[DEBUG] TaskService.List error: %v\n", err)
 		return nil, fmt.Errorf("list tasks: %w", err)
 	}
 	for i := range list {
 		enrichTask(&list[i])
 	}
+	fmt.Printf("[DEBUG] TaskService.List returned %d tasks\n", len(list))
 	return list, nil
 }
 
-// Get returns a single task.
+// Get 返回单个任务。
 func (s *TaskService) Get(id int64) (*models.Task, error) {
 	t, err := s.store.Get(id)
 	if err != nil {
@@ -43,9 +46,23 @@ func (s *TaskService) Get(id int64) (*models.Task, error) {
 	return t, nil
 }
 
-// Create validates and creates a task.
+// Create 校验并创建任务。
 func (s *TaskService) Create(req requests.TaskCreateReq) (*models.Task, error) {
+	fmt.Printf("[DEBUG] TaskService.Create req=%+v\n", req)
 	if err := validateTaskCreate(req); err != nil {
+		fmt.Printf("[DEBUG] TaskService.Create validation error: %v\n", err)
+		return nil, err
+	}
+	dueAt, err := parseOptionalTime(req.DueAt)
+	if err != nil {
+		return nil, err
+	}
+	remindAt, err := parseOptionalTime(req.RemindAt)
+	if err != nil {
+		return nil, err
+	}
+	pausedDate, err := parseOptionalTime(req.PausedDate)
+	if err != nil {
 		return nil, err
 	}
 	t := models.Task{
@@ -53,8 +70,9 @@ func (s *TaskService) Create(req requests.TaskCreateReq) (*models.Task, error) {
 		Title:         strings.TrimSpace(req.Title),
 		Description:   strings.TrimSpace(req.Description),
 		Type:          req.Type,
-		DueAt:         req.DueAt,
-		RemindAt:      req.RemindAt,
+		DueAt:         dueAt,
+		RemindAt:      remindAt,
+		PausedDate:    pausedDate,
 		StartTime:     req.StartTime,
 		EndTime:       req.EndTime,
 		IntervalValue: req.IntervalValue,
@@ -70,19 +88,26 @@ func (s *TaskService) Create(req requests.TaskCreateReq) (*models.Task, error) {
 			return nil, fmt.Errorf("calc next trigger: %w", err)
 		}
 		t.NextTriggerAt = next
+	} else if t.Type == models.TaskTypeTodo {
+		t.NextTriggerAt = remindAt
 	}
+	fmt.Printf("[DEBUG] TaskService.Create before store next_trigger_at=%v\n", t.NextTriggerAt)
 	created, err := s.store.Create(&t)
 	if err != nil {
+		fmt.Printf("[DEBUG] TaskService.Create store error: %v\n", err)
 		return nil, fmt.Errorf("create task: %w", err)
 	}
 	enrichTask(created)
+	fmt.Printf("[DEBUG] TaskService.Created id=%d next_trigger_at=%v\n", created.ID, created.NextTriggerAt)
 	return created, nil
 }
 
-// Update validates and updates a task.
+// Update 校验并更新任务。
 func (s *TaskService) Update(req requests.TaskUpdateReq) (*models.Task, error) {
+	fmt.Printf("[DEBUG] TaskService.Update req=%+v\n", req)
 	existing, err := s.store.Get(req.ID)
 	if err != nil {
+		fmt.Printf("[DEBUG] TaskService.Update get error: %v\n", err)
 		return nil, fmt.Errorf("get task: %w", err)
 	}
 
@@ -97,10 +122,18 @@ func (s *TaskService) Update(req requests.TaskUpdateReq) (*models.Task, error) {
 		existing.Type = req.Type
 	}
 	if req.DueAt != nil {
-		existing.DueAt = req.DueAt
+		dueAt, err := parseOptionalTime(req.DueAt)
+		if err != nil {
+			return nil, err
+		}
+		existing.DueAt = dueAt
 	}
 	if req.RemindAt != nil {
-		existing.RemindAt = req.RemindAt
+		remindAt, err := parseOptionalTime(req.RemindAt)
+		if err != nil {
+			return nil, err
+		}
+		existing.RemindAt = remindAt
 	}
 	if req.StartTime != "" {
 		existing.StartTime = req.StartTime
@@ -123,6 +156,13 @@ func (s *TaskService) Update(req requests.TaskUpdateReq) (*models.Task, error) {
 	if req.MonthDay != 0 {
 		existing.MonthDay = req.MonthDay
 	}
+	if req.PausedDate != nil {
+		pausedDate, err := parseOptionalTime(req.PausedDate)
+		if err != nil {
+			return nil, err
+		}
+		existing.PausedDate = pausedDate
+	}
 
 	if err := validateTask(*existing); err != nil {
 		return nil, err
@@ -134,19 +174,24 @@ func (s *TaskService) Update(req requests.TaskUpdateReq) (*models.Task, error) {
 			return nil, fmt.Errorf("calc next trigger: %w", err)
 		}
 		existing.NextTriggerAt = next
+	} else if existing.Type == models.TaskTypeTodo {
+		existing.NextTriggerAt = existing.RemindAt
 	} else {
 		existing.NextTriggerAt = nil
 	}
+	fmt.Printf("[DEBUG] TaskService.Update before store id=%d next_trigger_at=%v\n", existing.ID, existing.NextTriggerAt)
 
 	updated, err := s.store.Update(existing)
 	if err != nil {
+		fmt.Printf("[DEBUG] TaskService.Update store error: %v\n", err)
 		return nil, fmt.Errorf("update task: %w", err)
 	}
 	enrichTask(updated)
+	fmt.Printf("[DEBUG] TaskService.Updated id=%d next_trigger_at=%v\n", updated.ID, updated.NextTriggerAt)
 	return updated, nil
 }
 
-// Delete removes a task.
+// Delete 删除任务。
 func (s *TaskService) Delete(id int64) error {
 	if err := s.store.Delete(id); err != nil {
 		return fmt.Errorf("delete task: %w", err)
@@ -154,7 +199,7 @@ func (s *TaskService) Delete(id int64) error {
 	return nil
 }
 
-// ToggleCompleted flips the completion status.
+// ToggleCompleted 切换任务的完成状态。
 func (s *TaskService) ToggleCompleted(id int64) (*models.Task, error) {
 	t, err := s.store.ToggleCompleted(id)
 	if err != nil {
@@ -164,7 +209,7 @@ func (s *TaskService) ToggleCompleted(id int64) (*models.Task, error) {
 	return t, nil
 }
 
-// TogglePause flips the pause status for today.
+// TogglePause 切换今日暂停状态。
 func (s *TaskService) TogglePause(id int64) (*models.Task, error) {
 	t, err := s.store.TogglePause(id)
 	if err != nil {
@@ -174,7 +219,7 @@ func (s *TaskService) TogglePause(id int64) (*models.Task, error) {
 	return t, nil
 }
 
-// ClearCompleted removes all completed tasks.
+// ClearCompleted 删除所有已完成的任务。
 func (s *TaskService) ClearCompleted() error {
 	if err := s.store.ClearCompleted(); err != nil {
 		return fmt.Errorf("clear completed: %w", err)
@@ -187,8 +232,6 @@ func validateTaskCreate(req requests.TaskCreateReq) error {
 		WorkspaceID:   req.WorkspaceID,
 		Title:         req.Title,
 		Type:          req.Type,
-		DueAt:         req.DueAt,
-		RemindAt:      req.RemindAt,
 		StartTime:     req.StartTime,
 		EndTime:       req.EndTime,
 		IntervalValue: req.IntervalValue,
@@ -198,6 +241,25 @@ func validateTaskCreate(req requests.TaskCreateReq) error {
 		MonthDay:      req.MonthDay,
 	}
 	return validateTask(t)
+}
+
+func parseOptionalTime(s *string) (*time.Time, error) {
+	if s == nil || *s == "" {
+		return nil, nil
+	}
+	// 前端传入的 ISO 字符串（RFC3339）
+	if t, err := time.Parse(time.RFC3339, *s); err == nil {
+		return &t, nil
+	}
+	// 带秒的 datetime-local
+	if t, err := time.ParseInLocation("2006-01-02T15:04:05", *s, time.Local); err == nil {
+		return &t, nil
+	}
+	// 不带秒的 datetime-local（浏览器默认）
+	if t, err := time.ParseInLocation("2006-01-02T15:04", *s, time.Local); err == nil {
+		return &t, nil
+	}
+	return nil, fmt.Errorf("invalid time format: %s", *s)
 }
 
 func validateTask(t models.Task) error {
@@ -287,7 +349,7 @@ func parseTimeOfDay(t string) (hour, minute int, err error) {
 	return tm.Hour(), tm.Minute(), nil
 }
 
-// calcNextTrigger computes the next trigger time for a reminder task.
+// calcNextTrigger 计算定时提醒的下次触发时间。
 func calcNextTrigger(t models.Task) (*time.Time, error) {
 	now := time.Now()
 	today := now.Truncate(24 * time.Hour)
@@ -308,7 +370,7 @@ func calcNextTrigger(t models.Task) (*time.Time, error) {
 		interval = time.Duration(t.IntervalValue) * time.Minute
 	}
 
-	// Try today first.
+	// 优先尝试今天的候选时间。
 	candidate := today.Add(time.Duration(sh)*time.Hour + time.Duration(sm)*time.Minute)
 	end := today.Add(time.Duration(eh)*time.Hour + time.Duration(em)*time.Minute)
 
@@ -322,7 +384,7 @@ func calcNextTrigger(t models.Task) (*time.Time, error) {
 				return &candidate, nil
 			}
 		}
-		// Move to next valid day start.
+		// 移到下一天的起始时间。
 		candidate = candidate.Add(24 * time.Hour)
 		candidate = candidate.Truncate(24 * time.Hour).Add(time.Duration(sh)*time.Hour + time.Duration(sm)*time.Minute)
 		end = candidate.Truncate(24 * time.Hour).Add(time.Duration(eh)*time.Hour + time.Duration(em)*time.Minute)
@@ -366,32 +428,46 @@ func isValidDay(t models.Task, day time.Time) bool {
 	return true
 }
 
-// RecalcNextTrigger recalculates and persists the next trigger time after a reminder fires.
-// ListPendingReminders returns active reminders ready to fire.
+// RecalcNextTrigger 在提醒触发后重新计算并持久化下次触发时间。
+// ListPendingReminders 返回准备触发的活跃提醒。
 func (s *TaskService) ListPendingReminders(now time.Time) ([]models.Task, error) {
+	fmt.Printf("[DEBUG] TaskService.ListPendingReminders now=%v\n", now)
 	list, err := s.store.ListPendingReminders(now)
 	if err != nil {
+		fmt.Printf("[DEBUG] TaskService.ListPendingReminders error: %v\n", err)
 		return nil, fmt.Errorf("list pending reminders: %w", err)
 	}
 	for i := range list {
 		enrichTask(&list[i])
 	}
+	fmt.Printf("[DEBUG] TaskService.ListPendingReminders returned %d tasks\n", len(list))
 	return list, nil
 }
 
 func (s *TaskService) RecalcNextTrigger(id int64) error {
+	fmt.Printf("[DEBUG] TaskService.RecalcNextTrigger id=%d\n", id)
 	t, err := s.store.Get(id)
 	if err != nil {
+		fmt.Printf("[DEBUG] TaskService.RecalcNextTrigger get error: %v\n", err)
 		return fmt.Errorf("get task: %w", err)
 	}
-	if t.Type != models.TaskTypeReminder {
+	if t.Type == models.TaskTypeReminder {
+		next, err := calcNextTrigger(*t)
+		if err != nil {
+			return fmt.Errorf("calc next trigger: %w", err)
+		}
+		t.NextTriggerAt = next
+	} else if t.Type == models.TaskTypeTodo {
+		// 待办提醒触发一次后清除
+		t.NextTriggerAt = nil
+	} else {
+		fmt.Printf("[DEBUG] TaskService.RecalcNextTrigger skipped type=%s\n", t.Type)
 		return nil
 	}
-	next, err := calcNextTrigger(*t)
-	if err != nil {
-		return fmt.Errorf("calc next trigger: %w", err)
-	}
-	t.NextTriggerAt = next
+	fmt.Printf("[DEBUG] TaskService.RecalcNextTrigger new next_trigger_at=%v\n", t.NextTriggerAt)
 	_, err = s.store.Update(t)
+	if err != nil {
+		fmt.Printf("[DEBUG] TaskService.RecalcNextTrigger update error: %v\n", err)
+	}
 	return err
 }

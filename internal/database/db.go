@@ -9,7 +9,7 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-// Open initialises the SQLite database, runs migrations and returns the connection.
+// Open 初始化 SQLite 数据库，执行迁移并返回连接。
 func Open() (*sql.DB, error) {
 	dir, err := os.UserConfigDir()
 	if err != nil {
@@ -39,7 +39,7 @@ func Open() (*sql.DB, error) {
 
 func migrate(db *sql.DB) error {
 	migrations := []string{
-		// 001_init.sql content is embedded here for self-containment.
+		// 001_init.sql 内容内嵌于此以保持自包含。
 		`CREATE TABLE IF NOT EXISTS workspaces (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			name TEXT NOT NULL,

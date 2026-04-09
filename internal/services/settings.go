@@ -9,19 +9,19 @@ import (
 	"whendo/internal/requests"
 )
 
-// SettingsService provides settings business logic.
+// SettingsService 提供设置相关的业务逻辑。
 type SettingsService struct {
 	store *database.SettingsStore
 }
 
-// NewSettingsService creates a new SettingsService.
+// NewSettingsService 创建一个新的 SettingsService 实例。
 func NewSettingsService(db *sql.DB) *SettingsService {
 	s := &SettingsService{store: database.NewSettingsStore(db)}
 	_ = s.store.Open()
 	return s
 }
 
-// Get returns all settings as a map.
+// Get 以 map 形式返回所有设置。
 func (s *SettingsService) Get() (map[string]string, error) {
 	m, err := s.store.All()
 	if err != nil {
@@ -30,7 +30,7 @@ func (s *SettingsService) Get() (map[string]string, error) {
 	return m, nil
 }
 
-// Update updates settings.
+// Update 更新设置。
 func (s *SettingsService) Update(req requests.SettingsUpdateReq) error {
 	if req.DefaultWorkspaceID != "" {
 		id, err := strconv.ParseInt(req.DefaultWorkspaceID, 10, 64)
@@ -49,7 +49,7 @@ func (s *SettingsService) Update(req requests.SettingsUpdateReq) error {
 	return nil
 }
 
-// DefaultWorkspaceID returns the default workspace id.
+// DefaultWorkspaceID 返回默认工作区 ID。
 func (s *SettingsService) DefaultWorkspaceID() int64 {
 	m, err := s.store.All()
 	if err != nil {

@@ -7,17 +7,17 @@ import (
 	"whendo/internal/models"
 )
 
-// WorkspaceStore provides workspace storage operations.
+// WorkspaceStore 提供工作区的存储操作。
 type WorkspaceStore struct {
 	db *sql.DB
 }
 
-// NewWorkspaceStore creates a new WorkspaceStore.
+// NewWorkspaceStore 创建一个新的 WorkspaceStore 实例。
 func NewWorkspaceStore(db *sql.DB) *WorkspaceStore {
 	return &WorkspaceStore{db: db}
 }
 
-// List returns all workspaces ordered by created_at ASC.
+// List 返回所有工作区，按 created_at 升序排列。
 func (s *WorkspaceStore) List() ([]models.Workspace, error) {
 	rows, err := s.db.Query(`SELECT id, name, created_at, updated_at FROM workspaces ORDER BY created_at ASC`)
 	if err != nil {
@@ -36,7 +36,7 @@ func (s *WorkspaceStore) List() ([]models.Workspace, error) {
 	return list, rows.Err()
 }
 
-// Create inserts a new workspace.
+// Create 插入一个新的工作区。
 func (s *WorkspaceStore) Create(name string) (*models.Workspace, error) {
 	res, err := s.db.Exec(`INSERT INTO workspaces (name) VALUES (?)`, name)
 	if err != nil {
@@ -46,7 +46,7 @@ func (s *WorkspaceStore) Create(name string) (*models.Workspace, error) {
 	return s.Get(id)
 }
 
-// Get returns a workspace by id.
+// Get 根据 ID 返回工作区。
 func (s *WorkspaceStore) Get(id int64) (*models.Workspace, error) {
 	var ws models.Workspace
 	row := s.db.QueryRow(`SELECT id, name, created_at, updated_at FROM workspaces WHERE id = ?`, id)
@@ -59,7 +59,7 @@ func (s *WorkspaceStore) Get(id int64) (*models.Workspace, error) {
 	return &ws, nil
 }
 
-// Update renames a workspace.
+// Update 重命名工作区。
 func (s *WorkspaceStore) Update(id int64, name string) (*models.Workspace, error) {
 	_, err := s.db.Exec(`UPDATE workspaces SET name = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`, name, id)
 	if err != nil {
@@ -68,7 +68,7 @@ func (s *WorkspaceStore) Update(id int64, name string) (*models.Workspace, error
 	return s.Get(id)
 }
 
-// Delete removes a workspace and its tasks via CASCADE.
+// Delete 删除工作区，通过外键级联删除其任务。
 func (s *WorkspaceStore) Delete(id int64) error {
 	_, err := s.db.Exec(`DELETE FROM workspaces WHERE id = ?`, id)
 	if err != nil {

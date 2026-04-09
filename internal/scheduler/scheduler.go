@@ -11,7 +11,7 @@ import (
 	"whendo/internal/services"
 )
 
-// Scheduler polls the database and emits reminder events.
+// Scheduler 轮询数据库并发送提醒事件。
 type Scheduler struct {
 	db      *sql.DB
 	cancel  context.CancelFunc
@@ -20,7 +20,7 @@ type Scheduler struct {
 	taskSvc *services.TaskService
 }
 
-// New creates a new Scheduler instance.
+// New 创建一个新的 Scheduler 实例。
 func New(db *sql.DB) *Scheduler {
 	return &Scheduler{
 		db:      db,
@@ -28,7 +28,7 @@ func New(db *sql.DB) *Scheduler {
 	}
 }
 
-// Start begins the scheduling loop in a background goroutine.
+// Start 在后台 goroutine 中启动调度循环。
 func (s *Scheduler) Start(ctx context.Context) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -44,7 +44,7 @@ func (s *Scheduler) Start(ctx context.Context) {
 	go s.loop(ctx)
 }
 
-// Stop signals the scheduler to shut down gracefully.
+// Stop 优雅地关闭调度器。
 func (s *Scheduler) Stop() {
 	s.mu.Lock()
 	cancel := s.cancel
@@ -59,10 +59,18 @@ func (s *Scheduler) Stop() {
 func (s *Scheduler) loop(ctx context.Context) {
 	defer s.wg.Done()
 
-	ticker := time.NewTicker(30 * time.Second)
+	// 等待到下一个整分（00秒）对齐执行。
+	now := time.Now()
+	sleep := time.Until(now.Add(time.Minute).Truncate(time.Minute))
+	select {
+	case <-ctx.Done():
+		return
+	case <-time.After(sleep):
+	}
+
+	ticker := time.NewTicker(time.Minute)
 	defer ticker.Stop()
 
-	// Run immediately on start.
 	s.tick(ctx)
 
 	for {
@@ -78,20 +86,22 @@ func (s *Scheduler) loop(ctx context.Context) {
 func (s *Scheduler) tick(ctx context.Context) {
 	store := services.NewTaskService(s.db)
 	now := time.Now()
+	fmt.Printf("[DEBUG] Scheduler.tick started at %v\n", now)
 	list, err := store.ListPendingReminders(now)
 	if err != nil {
-		// Silently log error; no runtime logger available without context on each call.
-		fmt.Printf("scheduler tick error: %v\n", err)
+		fmt.Printf("[DEBUG] Scheduler.tick error: %v\n", err)
 		return
 	}
+	fmt.Printf("[DEBUG] Scheduler.tick found %d pending reminders\n", len(list))
 
 	for i := range list {
 		t := list[i]
-		// Emit event to frontend.
+		fmt.Printf("[DEBUG] Scheduler.tick emitting event for task id=%d type=%s next_trigger_at=%v\n", t.ID, t.Type, t.NextTriggerAt)
+		// 向前端发送事件。
 		runtime.EventsEmit(ctx, "reminder:triggered", t)
-		// Recalculate next trigger.
+		// 重新计算下次触发时间。
 		if err := store.RecalcNextTrigger(t.ID); err != nil {
-			fmt.Printf("scheduler recalc error: %v\n", err)
+			fmt.Printf("[DEBUG] Scheduler.tick recalc error for task %d: %v\n", t.ID, err)
 		}
 	}
 }

@@ -1,3 +1,3 @@
 package utils
 
-// placeholder for shared utility functions.
+// 共享工具函数的占位文件。

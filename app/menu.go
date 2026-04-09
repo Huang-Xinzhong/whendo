@@ -9,7 +9,7 @@ import (
 	wailsruntime "github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
-// NewMenu returns the application menu.
+// NewMenu 返回应用菜单。
 func NewMenu(ctx context.Context) *menu.Menu {
 	appMenu := menu.NewMenu()
 

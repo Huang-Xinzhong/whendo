@@ -21,7 +21,9 @@ import {
 function normalizeTaskPayload(req) {
   const payload = { ...req }
   if (payload.due_at === '') payload.due_at = null
+  else if (payload.due_at) payload.due_at = new Date(payload.due_at).toISOString()
   if (payload.remind_at === '') payload.remind_at = null
+  else if (payload.remind_at) payload.remind_at = new Date(payload.remind_at).toISOString()
   return payload
 }
 
