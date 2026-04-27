@@ -33,19 +33,24 @@ func (s *Scheduler) Start(ctx context.Context) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
+	fmt.Println("[调试] Scheduler.Start 启动调度器")
 	if s.cancel != nil {
+		fmt.Println("[调试] Scheduler.Start 停止旧调度器")
 		s.cancel()
 	}
 
 	ctx, cancel := context.WithCancel(ctx)
 	s.cancel = cancel
 
-	s.wg.Add(1)
-	go s.loop(ctx)
+	// 启动两条独立调度链。
+	s.wg.Add(2)
+	go s.loopReminder(ctx)
+	go s.loopTodo(ctx)
 }
 
 // Stop 优雅地关闭调度器。
 func (s *Scheduler) Stop() {
+	fmt.Println("[调试] Scheduler.Stop 停止调度器")
 	s.mu.Lock()
 	cancel := s.cancel
 	s.mu.Unlock()
@@ -54,54 +59,119 @@ func (s *Scheduler) Stop() {
 		cancel()
 	}
 	s.wg.Wait()
+	fmt.Println("[调试] Scheduler.Stop 调度器已停止")
 }
 
-func (s *Scheduler) loop(ctx context.Context) {
+// alignToNextMinute 返回到下一整分（00秒）的等待时长。
+func alignToNextMinute() time.Duration {
+	now := time.Now()
+	return time.Until(now.Add(time.Minute).Truncate(time.Minute))
+}
+
+func (s *Scheduler) loopReminder(ctx context.Context) {
 	defer s.wg.Done()
 
-	// 等待到下一个整分（00秒）对齐执行。
-	now := time.Now()
-	sleep := time.Until(now.Add(time.Minute).Truncate(time.Minute))
 	select {
 	case <-ctx.Done():
 		return
-	case <-time.After(sleep):
+	case <-time.After(alignToNextMinute()):
 	}
 
 	ticker := time.NewTicker(time.Minute)
 	defer ticker.Stop()
 
-	s.tick(ctx)
+	s.tickReminder(ctx)
 
 	for {
 		select {
 		case <-ctx.Done():
 			return
 		case <-ticker.C:
-			s.tick(ctx)
+			s.tickReminder(ctx)
 		}
 	}
 }
 
-func (s *Scheduler) tick(ctx context.Context) {
+func (s *Scheduler) loopTodo(ctx context.Context) {
+	defer s.wg.Done()
+
+	select {
+	case <-ctx.Done():
+		return
+	case <-time.After(alignToNextMinute()):
+	}
+
+	ticker := time.NewTicker(time.Minute)
+	defer ticker.Stop()
+
+	s.tickTodo(ctx)
+
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case <-ticker.C:
+			s.tickTodo(ctx)
+		}
+	}
+}
+
+func (s *Scheduler) tickReminder(ctx context.Context) {
 	store := services.NewTaskService(s.db)
 	now := time.Now()
-	fmt.Printf("[DEBUG] Scheduler.tick started at %v\n", now)
+	fmt.Printf("[调试] Scheduler.tickReminder 开始扫描，时间=%v\n", now)
+
+	// 阶段 1: 清理过期暂停与跳过区间。
+	if err := store.ClearExpiredPauses(now); err != nil {
+		fmt.Printf("[调试] Scheduler.tickReminder 清理过期暂停失败: %v\n", err)
+	}
+	if err := store.ClearExpiredSkips(now); err != nil {
+		fmt.Printf("[调试] Scheduler.tickReminder 清理过期跳过区间失败: %v\n", err)
+	}
+
+	// 阶段 2: 查询并触发 reminder。
 	list, err := store.ListPendingReminders(now)
 	if err != nil {
-		fmt.Printf("[DEBUG] Scheduler.tick error: %v\n", err)
+		fmt.Printf("[调试] Scheduler.tickReminder 扫描失败: %v\n", err)
 		return
 	}
-	fmt.Printf("[DEBUG] Scheduler.tick found %d pending reminders\n", len(list))
+	fmt.Printf("[调试] Scheduler.tickReminder 发现 %d 个待触发提醒\n", len(list))
 
 	for i := range list {
 		t := list[i]
-		fmt.Printf("[DEBUG] Scheduler.tick emitting event for task id=%d type=%s next_trigger_at=%v\n", t.ID, t.Type, t.NextTriggerAt)
-		// 向前端发送事件。
+		if t.NextTriggerAt != nil && now.Sub(*t.NextTriggerAt) > 5*time.Minute {
+			// 跳过延迟补提（休眠恢复 / 跳过区间恢复后）。
+			fmt.Printf("[调试] Scheduler.tickReminder 延迟跳过: task_id=%d next_trigger_at=%v\n", t.ID, t.NextTriggerAt)
+			if err := store.RecalcNextTrigger(t.ID); err != nil {
+				fmt.Printf("[调试] Scheduler.tickReminder 延迟推进失败: task_id=%d error=%v\n", t.ID, err)
+			}
+			continue
+		}
+		fmt.Printf("[调试] Scheduler.tickReminder 发送事件: task_id=%d type=%s next_trigger_at=%v\n", t.ID, t.Type, t.NextTriggerAt)
 		runtime.EventsEmit(ctx, "reminder:triggered", t)
-		// 重新计算下次触发时间。
 		if err := store.RecalcNextTrigger(t.ID); err != nil {
-			fmt.Printf("[DEBUG] Scheduler.tick recalc error for task %d: %v\n", t.ID, err)
+			fmt.Printf("[调试] Scheduler.tickReminder 重新计算触发时间失败: task_id=%d error=%v\n", t.ID, err)
+		}
+	}
+}
+
+func (s *Scheduler) tickTodo(ctx context.Context) {
+	store := services.NewTaskService(s.db)
+	now := time.Now()
+	fmt.Printf("[调试] Scheduler.tickTodo 开始扫描，时间=%v\n", now)
+	list, err := store.ListPendingTodos(now)
+	if err != nil {
+		fmt.Printf("[调试] Scheduler.tickTodo 扫描失败: %v\n", err)
+		return
+	}
+	fmt.Printf("[调试] Scheduler.tickTodo 发现 %d 个待触发待办\n", len(list))
+
+	for i := range list {
+		t := list[i]
+		fmt.Printf("[调试] Scheduler.tickTodo 发送事件: task_id=%d type=%s next_trigger_at=%v\n", t.ID, t.Type, t.NextTriggerAt)
+		runtime.EventsEmit(ctx, "reminder:triggered", t)
+		if err := store.RecalcNextTrigger(t.ID); err != nil {
+			fmt.Printf("[调试] Scheduler.tickTodo 重新计算触发时间失败: task_id=%d error=%v\n", t.ID, err)
 		}
 	}
 }

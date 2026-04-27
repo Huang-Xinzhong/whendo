@@ -23,16 +23,16 @@ func NewTaskService(db *sql.DB) *TaskService {
 
 // List 返回指定工作区下的任务列表。
 func (s *TaskService) List(workspaceID int64, filter string) ([]models.Task, error) {
-	fmt.Printf("[DEBUG] TaskService.List workspaceID=%d filter=%s\n", workspaceID, filter)
+	fmt.Printf("[调试] TaskService.List 获取任务列表: workspaceID=%d filter=%s\n", workspaceID, filter)
 	list, err := s.store.List(workspaceID, filter)
 	if err != nil {
-		fmt.Printf("[DEBUG] TaskService.List error: %v\n", err)
+		fmt.Printf("[调试] TaskService.List 失败: %v\n", err)
 		return nil, fmt.Errorf("list tasks: %w", err)
 	}
 	for i := range list {
 		enrichTask(&list[i])
 	}
-	fmt.Printf("[DEBUG] TaskService.List returned %d tasks\n", len(list))
+	fmt.Printf("[调试] TaskService.List 成功，共 %d 条任务\n", len(list))
 	return list, nil
 }
 
@@ -48,9 +48,9 @@ func (s *TaskService) Get(id int64) (*models.Task, error) {
 
 // Create 校验并创建任务。
 func (s *TaskService) Create(req requests.TaskCreateReq) (*models.Task, error) {
-	fmt.Printf("[DEBUG] TaskService.Create req=%+v\n", req)
+	fmt.Printf("[调试] TaskService.Create 创建任务: req=%+v\n", req)
 	if err := validateTaskCreate(req); err != nil {
-		fmt.Printf("[DEBUG] TaskService.Create validation error: %v\n", err)
+		fmt.Printf("[调试] TaskService.Create 校验失败: %v\n", err)
 		return nil, err
 	}
 	dueAt, err := parseOptionalTime(req.DueAt)
@@ -65,6 +65,19 @@ func (s *TaskService) Create(req requests.TaskCreateReq) (*models.Task, error) {
 	if err != nil {
 		return nil, err
 	}
+	pausedUntil, err := parseOptionalTime(req.PausedUntil)
+	if err != nil {
+		return nil, err
+	}
+	skipFrom, err := parseOptionalTime(req.SkipFrom)
+	if err != nil {
+		return nil, err
+	}
+	skipUntil, err := parseOptionalTime(req.SkipUntil)
+	if err != nil {
+		return nil, err
+	}
+
 	t := models.Task{
 		WorkspaceID:   req.WorkspaceID,
 		Title:         strings.TrimSpace(req.Title),
@@ -73,6 +86,9 @@ func (s *TaskService) Create(req requests.TaskCreateReq) (*models.Task, error) {
 		DueAt:         dueAt,
 		RemindAt:      remindAt,
 		PausedDate:    pausedDate,
+		PausedUntil:   pausedUntil,
+		SkipFrom:      skipFrom,
+		SkipUntil:     skipUntil,
 		StartTime:     req.StartTime,
 		EndTime:       req.EndTime,
 		IntervalValue: req.IntervalValue,
@@ -91,23 +107,23 @@ func (s *TaskService) Create(req requests.TaskCreateReq) (*models.Task, error) {
 	} else if t.Type == models.TaskTypeTodo {
 		t.NextTriggerAt = remindAt
 	}
-	fmt.Printf("[DEBUG] TaskService.Create before store next_trigger_at=%v\n", t.NextTriggerAt)
+	fmt.Printf("[调试] TaskService.Create 入库前 next_trigger_at=%v\n", t.NextTriggerAt)
 	created, err := s.store.Create(&t)
 	if err != nil {
-		fmt.Printf("[DEBUG] TaskService.Create store error: %v\n", err)
+		fmt.Printf("[调试] TaskService.Create 入库失败: %v\n", err)
 		return nil, fmt.Errorf("create task: %w", err)
 	}
 	enrichTask(created)
-	fmt.Printf("[DEBUG] TaskService.Created id=%d next_trigger_at=%v\n", created.ID, created.NextTriggerAt)
+	fmt.Printf("[调试] TaskService.Create 成功: id=%d next_trigger_at=%v\n", created.ID, created.NextTriggerAt)
 	return created, nil
 }
 
 // Update 校验并更新任务。
 func (s *TaskService) Update(req requests.TaskUpdateReq) (*models.Task, error) {
-	fmt.Printf("[DEBUG] TaskService.Update req=%+v\n", req)
+	fmt.Printf("[调试] TaskService.Update 更新任务: req=%+v\n", req)
 	existing, err := s.store.Get(req.ID)
 	if err != nil {
-		fmt.Printf("[DEBUG] TaskService.Update get error: %v\n", err)
+		fmt.Printf("[调试] TaskService.Update 查询失败: %v\n", err)
 		return nil, fmt.Errorf("get task: %w", err)
 	}
 
@@ -163,6 +179,27 @@ func (s *TaskService) Update(req requests.TaskUpdateReq) (*models.Task, error) {
 		}
 		existing.PausedDate = pausedDate
 	}
+	if req.PausedUntil != nil {
+		pausedUntil, err := parseOptionalTime(req.PausedUntil)
+		if err != nil {
+			return nil, err
+		}
+		existing.PausedUntil = pausedUntil
+	}
+	if req.SkipFrom != nil {
+		skipFrom, err := parseOptionalTime(req.SkipFrom)
+		if err != nil {
+			return nil, err
+		}
+		existing.SkipFrom = skipFrom
+	}
+	if req.SkipUntil != nil {
+		skipUntil, err := parseOptionalTime(req.SkipUntil)
+		if err != nil {
+			return nil, err
+		}
+		existing.SkipUntil = skipUntil
+	}
 
 	if err := validateTask(*existing); err != nil {
 		return nil, err
@@ -179,15 +216,15 @@ func (s *TaskService) Update(req requests.TaskUpdateReq) (*models.Task, error) {
 	} else {
 		existing.NextTriggerAt = nil
 	}
-	fmt.Printf("[DEBUG] TaskService.Update before store id=%d next_trigger_at=%v\n", existing.ID, existing.NextTriggerAt)
+	fmt.Printf("[调试] TaskService.Update 入库前 id=%d next_trigger_at=%v\n", existing.ID, existing.NextTriggerAt)
 
 	updated, err := s.store.Update(existing)
 	if err != nil {
-		fmt.Printf("[DEBUG] TaskService.Update store error: %v\n", err)
+		fmt.Printf("[调试] TaskService.Update 入库失败: %v\n", err)
 		return nil, fmt.Errorf("update task: %w", err)
 	}
 	enrichTask(updated)
-	fmt.Printf("[DEBUG] TaskService.Updated id=%d next_trigger_at=%v\n", updated.ID, updated.NextTriggerAt)
+	fmt.Printf("[调试] TaskService.Update 成功: id=%d next_trigger_at=%v\n", updated.ID, updated.NextTriggerAt)
 	return updated, nil
 }
 
@@ -210,10 +247,50 @@ func (s *TaskService) ToggleCompleted(id int64) (*models.Task, error) {
 }
 
 // TogglePause 切换今日暂停状态。
+// 内部改用 paused_until 实现：设置到今晚 23:59。
 func (s *TaskService) TogglePause(id int64) (*models.Task, error) {
-	t, err := s.store.TogglePause(id)
+	now := time.Now()
+	tonight := now.Truncate(24 * time.Hour).Add(24*time.Hour - time.Second)
+	return s.SetPauseUntil(id, &tonight)
+}
+
+// SetPauseUntil 设置/清除暂停截止时间。
+func (s *TaskService) SetPauseUntil(id int64, until *time.Time) (*models.Task, error) {
+	t, err := s.store.SetPauseUntil(id, until)
 	if err != nil {
-		return nil, fmt.Errorf("toggle pause: %w", err)
+		return nil, fmt.Errorf("set pause until: %w", err)
+	}
+	// 取消暂停时重新计算触发时间。
+	if until == nil && t.Type == models.TaskTypeReminder {
+		next, err := calcNextTrigger(*t)
+		if err != nil {
+			return nil, fmt.Errorf("calc next trigger: %w", err)
+		}
+		t.NextTriggerAt = next
+		if _, err := s.store.Update(t); err != nil {
+			return nil, fmt.Errorf("update after unpause: %w", err)
+		}
+		t, _ = s.store.Get(t.ID)
+	}
+	enrichTask(t)
+	return t, nil
+}
+
+// SetSkipRange 设置跳过区间。
+func (s *TaskService) SetSkipRange(id int64, from, until *time.Time) (*models.Task, error) {
+	t, err := s.store.SetSkipRange(id, from, until)
+	if err != nil {
+		return nil, fmt.Errorf("set skip range: %w", err)
+	}
+	enrichTask(t)
+	return t, nil
+}
+
+// ClearSkipRange 清除跳过区间。
+func (s *TaskService) ClearSkipRange(id int64) (*models.Task, error) {
+	t, err := s.store.ClearSkipRange(id)
+	if err != nil {
+		return nil, fmt.Errorf("clear skip range: %w", err)
 	}
 	enrichTask(t)
 	return t, nil
@@ -291,16 +368,41 @@ func validateTask(t models.Task) error {
 }
 
 func enrichTask(t *models.Task) {
-	if t.Type != models.TaskTypeReminder {
-		return
-	}
-	t.RemindText = buildRemindText(t)
 	now := time.Now()
+
+	// 填充 RemindText（仅限 reminder）
+	if t.Type == models.TaskTypeReminder {
+		t.RemindText = buildRemindText(t)
+	}
+
+	// 当日暂停（兼容旧 paused_date）
 	todayStr := now.Format("2006-01-02")
 	if t.PausedDate != nil && t.PausedDate.Format("2006-01-02") == todayStr {
 		t.PausedToday = true
 	} else {
 		t.PausedToday = false
+	}
+
+	// 持续暂停
+	if t.PausedUntil != nil && t.PausedUntil.After(now) {
+		t.IsPaused = true
+		if t.PausedUntil.Year() >= 9999 {
+			t.PausedText = "持续暂停"
+		} else {
+			t.PausedText = fmt.Sprintf("暂停到 %s", t.PausedUntil.Format("2006-01-02 15:04"))
+		}
+	} else {
+		t.IsPaused = false
+		t.PausedText = ""
+	}
+
+	// 跳过区间
+	if t.SkipFrom != nil && t.SkipUntil != nil && now.After(*t.SkipFrom) && now.Before(*t.SkipUntil) {
+		t.InSkipRange = true
+		t.SkipRangeText = fmt.Sprintf("跳过到 %s", t.SkipUntil.Format("2006-01-02 15:04"))
+	} else {
+		t.InSkipRange = false
+		t.SkipRangeText = ""
 	}
 }
 
@@ -350,6 +452,7 @@ func parseTimeOfDay(t string) (hour, minute int, err error) {
 }
 
 // calcNextTrigger 计算定时提醒的下次触发时间。
+// 修复：weekly 空 weekdays 报错；最大扫描 366 天兜底。
 func calcNextTrigger(t models.Task) (*time.Time, error) {
 	now := time.Now()
 	today := now.Truncate(24 * time.Hour)
@@ -370,6 +473,22 @@ func calcNextTrigger(t models.Task) (*time.Time, error) {
 		interval = time.Duration(t.IntervalValue) * time.Minute
 	}
 
+	// weekly 模式下检查 weekdays 有效性
+	if t.RepeatMode == models.RepeatModeWeekly {
+		valid := false
+		for _, s := range strings.Split(t.Weekdays, ",") {
+			var d int
+			fmt.Sscanf(s, "%d", &d)
+			if d >= 1 && d <= 7 {
+				valid = true
+				break
+			}
+		}
+		if !valid {
+			return nil, fmt.Errorf("weekdays must contain at least one valid day (1-7)")
+		}
+	}
+
 	// 优先尝试今天的候选时间。
 	candidate := today.Add(time.Duration(sh)*time.Hour + time.Duration(sm)*time.Minute)
 	end := today.Add(time.Duration(eh)*time.Hour + time.Duration(em)*time.Minute)
@@ -378,7 +497,10 @@ func calcNextTrigger(t models.Task) (*time.Time, error) {
 		candidate = candidate.Add(interval)
 	}
 
-	for {
+	maxDays := 366
+	daysChecked := 0
+
+	for daysChecked < maxDays {
 		if !candidate.After(end) {
 			if isValidDay(t, candidate) {
 				return &candidate, nil
@@ -399,7 +521,10 @@ func calcNextTrigger(t models.Task) (*time.Time, error) {
 				return &candidate, nil
 			}
 		}
+		daysChecked++
 	}
+
+	return nil, fmt.Errorf("unable to find next trigger within %d days", maxDays)
 }
 
 func isValidDay(t models.Task, day time.Time) bool {
@@ -428,30 +553,60 @@ func isValidDay(t models.Task, day time.Time) bool {
 	return true
 }
 
-// RecalcNextTrigger 在提醒触发后重新计算并持久化下次触发时间。
-// ListPendingReminders 返回准备触发的活跃提醒。
+// ListPendingReminders 返回准备触发的活跃提醒（仅 reminder）。
 func (s *TaskService) ListPendingReminders(now time.Time) ([]models.Task, error) {
-	fmt.Printf("[DEBUG] TaskService.ListPendingReminders now=%v\n", now)
+	fmt.Printf("[调试] TaskService.ListPendingReminders 查询待触发提醒: now=%v\n", now)
 	list, err := s.store.ListPendingReminders(now)
 	if err != nil {
-		fmt.Printf("[DEBUG] TaskService.ListPendingReminders error: %v\n", err)
+		fmt.Printf("[调试] TaskService.ListPendingReminders 失败: %v\n", err)
 		return nil, fmt.Errorf("list pending reminders: %w", err)
 	}
 	for i := range list {
 		enrichTask(&list[i])
 	}
-	fmt.Printf("[DEBUG] TaskService.ListPendingReminders returned %d tasks\n", len(list))
+	fmt.Printf("[调试] TaskService.ListPendingReminders 成功，共 %d 条\n", len(list))
 	return list, nil
 }
 
+// ListPendingTodos 返回准备触发的待办任务（仅 todo）。
+func (s *TaskService) ListPendingTodos(now time.Time) ([]models.Task, error) {
+	fmt.Printf("[调试] TaskService.ListPendingTodos 查询待触发待办: now=%v\n", now)
+	list, err := s.store.ListPendingTodos(now)
+	if err != nil {
+		fmt.Printf("[调试] TaskService.ListPendingTodos 失败: %v\n", err)
+		return nil, fmt.Errorf("list pending todos: %w", err)
+	}
+	for i := range list {
+		enrichTask(&list[i])
+	}
+	fmt.Printf("[调试] TaskService.ListPendingTodos 成功，共 %d 条\n", len(list))
+	return list, nil
+}
+
+// ClearExpiredPauses 清理已过期的暂停。
+func (s *TaskService) ClearExpiredPauses(now time.Time) error {
+	return s.store.ClearExpiredPauses(now)
+}
+
+// ClearExpiredSkips 清理已过期的跳过区间。
+func (s *TaskService) ClearExpiredSkips(now time.Time) error {
+	return s.store.ClearExpiredSkips(now)
+}
+
+// RecalcNextTrigger 在提醒触发后重新计算并持久化下次触发时间。
 func (s *TaskService) RecalcNextTrigger(id int64) error {
-	fmt.Printf("[DEBUG] TaskService.RecalcNextTrigger id=%d\n", id)
+	fmt.Printf("[调试] TaskService.RecalcNextTrigger 重新计算触发时间: id=%d\n", id)
 	t, err := s.store.Get(id)
 	if err != nil {
-		fmt.Printf("[DEBUG] TaskService.RecalcNextTrigger get error: %v\n", err)
+		fmt.Printf("[调试] TaskService.RecalcNextTrigger 查询失败: %v\n", err)
 		return fmt.Errorf("get task: %w", err)
 	}
 	if t.Type == models.TaskTypeReminder {
+		// 清理过期的 skip 区间
+		if t.SkipUntil != nil && !t.SkipUntil.After(time.Now()) {
+			t.SkipFrom = nil
+			t.SkipUntil = nil
+		}
 		next, err := calcNextTrigger(*t)
 		if err != nil {
 			return fmt.Errorf("calc next trigger: %w", err)
@@ -461,13 +616,13 @@ func (s *TaskService) RecalcNextTrigger(id int64) error {
 		// 待办提醒触发一次后清除
 		t.NextTriggerAt = nil
 	} else {
-		fmt.Printf("[DEBUG] TaskService.RecalcNextTrigger skipped type=%s\n", t.Type)
+		fmt.Printf("[调试] TaskService.RecalcNextTrigger 跳过未知类型: type=%s\n", t.Type)
 		return nil
 	}
-	fmt.Printf("[DEBUG] TaskService.RecalcNextTrigger new next_trigger_at=%v\n", t.NextTriggerAt)
+	fmt.Printf("[调试] TaskService.RecalcNextTrigger 新的触发时间: next_trigger_at=%v\n", t.NextTriggerAt)
 	_, err = s.store.Update(t)
 	if err != nil {
-		fmt.Printf("[DEBUG] TaskService.RecalcNextTrigger update error: %v\n", err)
+		fmt.Printf("[调试] TaskService.RecalcNextTrigger 更新失败: %v\n", err)
 	}
 	return err
 }

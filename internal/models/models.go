@@ -58,9 +58,16 @@ type Task struct {
 	MonthDay      int          `json:"month_day,omitempty"`
 	NextTriggerAt *time.Time   `json:"next_trigger_at,omitempty"`
 	PausedDate    *time.Time   `json:"paused_date,omitempty"`
+	PausedUntil   *time.Time   `json:"paused_until,omitempty"`
+	SkipFrom      *time.Time   `json:"skip_from,omitempty"`
+	SkipUntil     *time.Time   `json:"skip_until,omitempty"`
 	CreatedAt     time.Time    `json:"created_at"`
 	UpdatedAt     time.Time    `json:"updated_at"`
 	// 运行时填充的字段（不存储在数据库中）。
-	RemindText  string `json:"remindText,omitempty"`
-	PausedToday bool   `json:"pausedToday,omitempty"`
+	RemindText    string `json:"remindText,omitempty"`
+	PausedToday   bool   `json:"pausedToday,omitempty"`
+	IsPaused      bool   `json:"isPaused,omitempty"`
+	InSkipRange   bool   `json:"inSkipRange,omitempty"`
+	PausedText    string `json:"pausedText,omitempty"`
+	SkipRangeText string `json:"skipRangeText,omitempty"`
 }

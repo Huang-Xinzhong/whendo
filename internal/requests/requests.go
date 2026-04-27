@@ -31,6 +31,9 @@ type TaskCreateReq struct {
 	Weekdays      string              `json:"weekdays,omitempty"`
 	MonthDay      int                 `json:"month_day,omitempty"`
 	PausedDate    *string             `json:"paused_date,omitempty"`
+	PausedUntil   *string             `json:"paused_until,omitempty"`
+	SkipFrom      *string             `json:"skip_from,omitempty"`
+	SkipUntil     *string             `json:"skip_until,omitempty"`
 }
 
 // TaskUpdateReq 是更新任务的请求。
@@ -50,6 +53,9 @@ type TaskUpdateReq struct {
 	Weekdays      string              `json:"weekdays,omitempty"`
 	MonthDay      int                 `json:"month_day,omitempty"`
 	PausedDate    *string             `json:"paused_date,omitempty"`
+	PausedUntil   *string             `json:"paused_until,omitempty"`
+	SkipFrom      *string             `json:"skip_from,omitempty"`
+	SkipUntil     *string             `json:"skip_until,omitempty"`
 }
 
 // SettingsUpdateReq 是更新设置的请求。
